@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="IntervalGraph.Components.IntervalGraph"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:IntervalGraph.Components"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:b="clr-namespace:IntervalGraph.Infrastructure.Behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="White">
+
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}" >
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid x:Name="Legend" Grid.Column="0">
+
+        </Grid>
+
+        <ScrollViewer Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible"
+                      DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
+
+            <i:Interaction.Behaviors>
+                <b:BindableActualSizeBehavior ActualWidth="{Binding GraphWidth, Mode=OneWayToSource}"/>
+            </i:Interaction.Behaviors>
+
+            <Grid Width="{Binding ZoomedGraphWidth}" Background="Red">
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid x:Name="Graph" Row="0" 
+                      DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
+
+                    <i:Interaction.Behaviors>
+                        <b:BindableActualSizeBehavior ActualHeight="{Binding GraphHeigth, Mode=OneWayToSource}"/>
+                    </i:Interaction.Behaviors>
+
+                    <Line Stroke="Black" X1="0" X2="{Binding ZoomedGraphWidth}"/>
+
+                </Grid>
+
+                <Grid x:Name="UnderGraphNumbers" Row="1"
+                      DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
+
+                </Grid>
+            </Grid>
+
+        </ScrollViewer>
+
+    </Grid>
+    
+    
+</UserControl>
