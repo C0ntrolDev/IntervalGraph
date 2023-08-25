@@ -6,50 +6,103 @@
              xmlns:local="clr-namespace:IntervalGraph.Components"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:b="clr-namespace:IntervalGraph.Infrastructure.Behaviors"
+             xmlns:c="clr-namespace:IntervalGraph.Infrastructure.Conveters.GraphConverters.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
 
-    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}" >
+    <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Grid x:Name="Legend" Grid.Column="0">
+        <Grid x:Name="PART_Legend" Grid.Column="0">
 
         </Grid>
 
         <ScrollViewer Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible"
-                      DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
+                      DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
+                      BorderThickness="0">
 
             <i:Interaction.Behaviors>
                 <b:BindableActualSizeBehavior ActualWidth="{Binding GraphWidth, Mode=OneWayToSource}"/>
             </i:Interaction.Behaviors>
 
-            <Grid Width="{Binding ZoomedGraphWidth}" Background="Red">
+            <Grid Width="{Binding ZoomedGraphWidth}" Background="Transparent">
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Grid x:Name="Graph" Row="0" 
-                      DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
+                <Grid x:Name="PART_UpperGraph" Grid.Row="0" VerticalAlignment="Stretch">
 
                     <i:Interaction.Behaviors>
-                        <b:BindableActualSizeBehavior ActualHeight="{Binding GraphHeigth, Mode=OneWayToSource}"/>
+                        <b:BindableActualSizeBehavior ActualHeight="{Binding UpperGraphHeight, Mode=OneWayToSource}"/>
                     </i:Interaction.Behaviors>
-
-                    <Line Stroke="Black" X1="0" X2="{Binding ZoomedGraphWidth}"/>
 
                 </Grid>
 
-                <Grid x:Name="UnderGraphNumbers" Row="1"
+                <Grid x:Name="PART_Graph" Grid.Row="0" Grid.RowSpan="2" 
+                      VerticalAlignment="Stretch"
+                      DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
+                      Height="{Binding Path=GraphHeight, Mode=OneWay}">
+
+                    <ItemsControl ItemsSource="{Binding AxisValues}">
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=ColumnWidth}"
+                                        Height="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=GraphHeight}"
+                                        BorderThickness="1 0 0 0" BorderBrush="Black"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </Grid>
+
+                <Grid x:Name="PART_Axis" Grid.Row="1" Grid.RowSpan="2" >
+
+                    <i:Interaction.Behaviors>
+                        <b:BindableActualSizeBehavior ActualHeight="{Binding AxisHeight, Mode=OneWayToSource}"/>
+                    </i:Interaction.Behaviors>
+
+                    <Line VerticalAlignment="Center" StrokeThickness="2"
+                          Stroke="Black" X1="0" X2="{Binding ZoomedGraphWidth, Converter={c:Operation Operator=-, OperatorNum=15} }"/>
+
+                    <Path VerticalAlignment="Center" HorizontalAlignment="Right" 
+                          Data="M 0,0 l 0,10 l 15,-5 Z" Fill="Black"/>
+                </Grid>
+
+                <Grid x:Name="PART_UnderGraphNumbers" Grid.Row="3"
                       DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
 
+                    <ItemsControl ItemsSource="{Binding AxisValues}" BorderThickness="0">
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=ColumnWidth}">
+                                    <TextBlock Text="{Binding}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
             </Grid>
 

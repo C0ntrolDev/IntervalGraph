@@ -6,6 +6,8 @@
         xmlns:local="clr-namespace:IntervalGraph.Views.Windows"
         xmlns:c="clr-namespace:IntervalGraph.Components"
         xmlns:vm="clr-namespace:IntervalGraph.ViewModels"
+        xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:behaviors="clr-namespace:IntervalGraph.Infrastructure.Behaviors"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="1000">
     <Window.DataContext>
@@ -23,17 +25,10 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Slider Grid.Row="0" Grid.RowSpan="2" Margin="20" x:Name="Slider" Grid.Column="0" Maximum="6" Minimum="1" Value="{Binding ElementName=OldGraph, Path=Zoom}" Orientation="Vertical" IsDirectionReversed="True"/>
+        <Slider x:Name="Slider" Grid.Row="0" Grid.RowSpan="2" Margin="20"  Grid.Column="0" Maximum="6" Minimum="1" Orientation="Vertical" IsDirectionReversed="True"/>
 
-        <Grid Grid.Row="0" Grid.Column="1" MinWidth="600" Margin="40">
-            <c:OldIntervalGraph x:Name="OldGraph" MinValue="0" MaxValue="128" Step="3" MaximumTextZoom="3" MaxHorizontalFontSize="0.16" MinHorizontalFontSize="0.07"
-                             BorderBrush="#1f1f1f" MajorBrush="#4a4a4a" MinorBrush="#bababa" GraphIntervals="{Binding GraphIntervals}"/>
-
-        </Grid>
-
-        <Grid Grid.Row="1" Grid.Column="1" MinWidth="200" Margin="40">
-            <c:IntervalGraph x:Name="NewGraph" />
-            <TextBlock Text="{Binding ElementName=NewGraph, Path=ZoomedGraphWidth}"/>
+        <Grid Grid.Row="1" Grid.Column="1" MinWidth="200" MaxWidth="1000" Margin="40">
+            <c:IntervalGraph x:Name="NewGraph" Zoom="{Binding ElementName=Slider, Path=Value}" MinValue="-10" MaxValue="100"/>
         </Grid>
     </Grid>
 </Window>

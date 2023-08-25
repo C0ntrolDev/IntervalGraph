@@ -12,6 +12,7 @@ namespace IntervalGraph.Models.Graph
         public Brush StrokeBrush { get; set; } = Brushes.Black;
         public Brush FillBrush { get; set; } = Brushes.Black;
 
+        public object Icon { get; set; }
         public string Name { get; set; } = "";
         public bool IsEnabled { get; set; } = true;
     }
