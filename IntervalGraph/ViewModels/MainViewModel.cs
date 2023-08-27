@@ -30,7 +30,8 @@ namespace IntervalGraph.ViewModels
                     {
                         LastPoint = new IntervalPoint<int>()
                         {
-                            X = 32
+                            X = 32,
+                            IsInclusive = true
                         }
                     },
 

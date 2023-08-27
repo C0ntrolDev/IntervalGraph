@@ -178,6 +178,7 @@ namespace IntervalGraph.Components
             if (dependencyObject is IntervalGraph intervalGraph)
             {
                 intervalGraph.UpdateZoomedGraphWidth();
+                intervalGraph.IntAxis.UpdateTextFontSize((double)e.NewValue);
             }
 
         }
@@ -215,7 +216,7 @@ namespace IntervalGraph.Components
             nameof(MajorColorBrush),
             typeof(Brush),
             typeof(IntervalGraph),
-            new PropertyMetadata(default(Brush)));
+            new PropertyMetadata(Brushes.Black));
 
         public Brush MajorColorBrush
         {
@@ -231,7 +232,7 @@ namespace IntervalGraph.Components
             nameof(MinorColorBrush),
             typeof(Brush),
             typeof(IntervalGraph),
-            new PropertyMetadata(default(Brush)));
+            new PropertyMetadata(Brushes.Black));
 
         public Brush MinorColorBrush
         {
@@ -247,7 +248,7 @@ namespace IntervalGraph.Components
             nameof(MajorThickness),
             typeof(double),
             typeof(IntervalGraph),
-            new PropertyMetadata(default(double)));
+            new PropertyMetadata(1.0));
 
         public double MajorThickness
         {
@@ -263,7 +264,7 @@ namespace IntervalGraph.Components
             nameof(MinorThickness),
             typeof(double),
             typeof(IntervalGraph),
-            new PropertyMetadata(default(double)));
+            new PropertyMetadata(1.0));
 
         public double MinorThickness
         {
@@ -279,7 +280,7 @@ namespace IntervalGraph.Components
             nameof(MajorStep),
             typeof(int),
             typeof(IntervalGraph),
-            new PropertyMetadata(default(int)));
+            new PropertyMetadata(1));
 
         public int MajorStep
         {
@@ -295,7 +296,7 @@ namespace IntervalGraph.Components
             nameof(MinorStep),
             typeof(int),
             typeof(IntervalGraph),
-            new PropertyMetadata(default(int)));
+            new PropertyMetadata(1));
 
         public int MinorStep
         {
@@ -411,7 +412,7 @@ namespace IntervalGraph.Components
         #endregion
 
         public int ColumnCount => DrawedMaxValue - DrawedMinValue + 1;
-        public IEnumerable<int?> AxisValues => Enumerable.Range(DrawedMinValue, ColumnCount).Select(i => (int?)i).Append(null);
+        public IEnumerable<int?> AxisValues => Enumerable.Range(DrawedMinValue, ColumnCount).Select(i => (int?)i);
 
         #region ColumnWidth
 

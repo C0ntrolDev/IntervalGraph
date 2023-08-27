@@ -6,8 +6,8 @@
              xmlns:local="clr-namespace:IntervalGraph.Components"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:b="clr-namespace:IntervalGraph.Infrastructure.Behaviors"
-             xmlns:c="clr-namespace:IntervalGraph.Infrastructure.Conveters.GraphConverters.Converters"
-             xmlns:cm="clr-namespace:IntervalGraph.Infrastructure.Conveters.GraphConverters.MultiConverters"
+             xmlns:cm="clr-namespace:IntervalGraph.Infrastructure.Conveters.MultiConverters"
+             xmlns:c="clr-namespace:IntervalGraph.Infrastructure.Conveters.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
@@ -34,19 +34,14 @@
 
             <Grid Width="{Binding ZoomedGraphWidth}" Background="Transparent">
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.TextContainerHeight}"/>
                 </Grid.RowDefinitions>
 
-                <Grid x:Name="PART_UpperGraph" Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch">
+                <Grid x:Name="PART_UpperGraph" Grid.Row="0" VerticalAlignment="Stretch">
 
                     <i:Interaction.Behaviors>
                         <b:BindableActualSizeBehavior ActualHeight="{Binding UpperGraphHeight, Mode=OneWayToSource}"/>
@@ -54,7 +49,7 @@
 
                 </Grid>
 
-                <Grid x:Name="PART_Graph" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" 
+                <Grid x:Name="PART_Graph" Grid.Row="0" Grid.RowSpan="2" 
                       VerticalAlignment="Stretch"
                       DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
                       Height="{Binding Path=GraphHeight, Mode=OneWay}">
@@ -69,9 +64,45 @@
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Width="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=ColumnWidth}"
-                                        Height="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=GraphHeight}"
-                                        BorderThickness="1 0 0 0" BorderBrush="Black"/>
+                                <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=ColumnWidth}">
+                                    <Line Y1 ="0" Y2="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=GraphHeight}"
+                                          Margin="{Binding RelativeSource={RelativeSource Self}, Path=StrokeThickness, Converter={c:CompositeConverter First={c:Operation Operator=/, OperatorNum=2}, Second={c:DoubleToMarginConverter BoolMargin='1 0 0 0'}}}">
+                                        <Line.Style>
+                                            <Style TargetType="Line">
+                                                <Style.Triggers>
+                                                    <DataTrigger Value="True">
+                                                        <DataTrigger.Binding>
+
+                                                            <MultiBinding Converter="{cm:IsValueDivisibleConverter}">
+                                                                <Binding/>
+                                                                <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" Path="MinorStep"/>
+                                                            </MultiBinding>
+                                                        </DataTrigger.Binding>
+
+                                                        <Setter Property="StrokeThickness" Value="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=MinorThickness}"/>
+                                                        <Setter Property="Stroke" Value="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=MinorColorBrush}"/>
+
+                                                    </DataTrigger>
+
+                                                    <DataTrigger Value="True">
+
+                                                        <DataTrigger.Binding>
+                                                            <MultiBinding Converter="{cm:IsValueDivisibleConverter}">
+                                                                <Binding/>
+                                                                <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" Path="MajorStep"/>
+                                                            </MultiBinding>
+                                                        </DataTrigger.Binding>
+
+                                                        <Setter Property="StrokeThickness" Value="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=MajorThickness}"/>
+                                                        <Setter Property="Stroke" Value="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=MajorColorBrush}"/>
+
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Line.Style>
+                                    </Line>
+                                </Grid>
+                               
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -114,22 +145,57 @@
                     </ItemsControl>
                 </Grid>
 
-                <Grid x:Name="PART_Axis" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" >
+                <Grid x:Name="PART_Axis" Grid.Row="1" Grid.RowSpan="2">
 
                     <i:Interaction.Behaviors>
                         <b:BindableActualSizeBehavior ActualHeight="{Binding AxisHeight, Mode=OneWayToSource}"/>
                     </i:Interaction.Behaviors>
 
-                    <Line VerticalAlignment="Center" StrokeThickness="2"
-                          Stroke="Black" X1="0" X2="{Binding ZoomedGraphWidth, Converter={c:Operation Operator=-, OperatorNum=15} }"/>
+                    <Line VerticalAlignment="Center" 
+                          Margin="{Binding IntAxis.AxisThickness, Converter={c:CompositeConverter First={c:Operation Operator=/, OperatorNum=2}, Second={c:DoubleToMarginConverter BoolMargin='0 1 0 0'}}}"
+                          StrokeThickness="{Binding IntAxis.AxisThickness}"
+                          Stroke="{Binding IntAxis.AxisColorBrush}" 
+                          X1="0" 
+                          X2="{Binding ZoomedGraphWidth, Converter={c:Operation Operator=-, OperatorNum=10} }"/>
 
                     <Path VerticalAlignment="Center" HorizontalAlignment="Right" 
-                          Data="M 0,0 l 0,10 l 15,-5 Z" Fill="Black"/>
+                          Data="M 0,0 l 0,10 l 11,-5 Z" Fill="{Binding IntAxis.AxisColorBrush}"/>
+
+                    <ItemsControl ItemsSource="{Binding GraphIntervals}">
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Grid/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Path Stroke="{Binding StrokeBrush}" 
+                                      StrokeThickness="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.CirclesThickness}"
+                                      Fill="{Binding FillBrush}"
+                                      VerticalAlignment="Center">
+
+                                    <Path.Data>
+                                        <MultiBinding Converter="{cm:GraphIntervalToAxisCircle}">
+                                            <Binding/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="ColumnWidth"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="IntAxis.CirclesRadius"/>
+                                        </MultiBinding>
+                                    </Path.Data>
+
+                                </Path>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
 
-                <Grid x:Name="PART_UnderGraphNumbers" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3"
+                <Grid x:Name="PART_UnderGraphNumbers" Grid.Row="3"
                       DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
-                      Width="{Binding ZoomedGraphWidth}">
+                      Width="{Binding ZoomedGraphWidth}"
+                      HorizontalAlignment="Right">
 
                     <ItemsControl ItemsSource="{Binding AxisValues}" HorizontalAlignment="Right">
 
@@ -141,15 +207,42 @@
 
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=ColumnWidth}">
-                                    <TextBlock>
-                                        <TextBlock.Text>
-                                            <MultiBinding Converter="{cm:StringFormatConverter}">
-                                                <Binding/>
-                                                <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" Path="IntAxis.TextFormat"/>
-                                            </MultiBinding>
-                                        </TextBlock.Text>
-                                    </TextBlock>
+                                <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=ColumnWidth}"
+                                      ClipToBounds="False">
+
+                                    <Canvas>
+
+                                        <TextBlock FontSize="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.DrawedFontSize}"
+                                                   Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.TextColorBrush}">
+
+                                            <TextBlock.Text>
+                                                <MultiBinding Converter="{cm:StringFormatConverter}">
+                                                    <Binding/>
+                                                    <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" Path="IntAxis.TextFormat"/>
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Value="False">
+
+                                                            <DataTrigger.Binding>
+                                                                <MultiBinding Converter="{cm:IsValueDivisibleConverter}">
+                                                                    <Binding/>
+                                                                    <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" Path="IntAxis.NumStep "/>
+                                                                </MultiBinding>
+                                                            </DataTrigger.Binding>
+
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+
+                                    </Canvas>
+
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

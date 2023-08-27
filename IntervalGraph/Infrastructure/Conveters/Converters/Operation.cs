@@ -2,12 +2,12 @@
 using System.Globalization;
 using IntervalGraph.Infrastructure.Conveters.Base;
 
-namespace IntervalGraph.Infrastructure.Conveters.GraphConverters.Converters
+namespace IntervalGraph.Infrastructure.Conveters.Converters
 {
     public class Operation : MarkupConverter
     {
         public char? Operator { get; set; }
-        public int OperatorNum { get; set; }
+        public double OperatorNum { get; set; }
 
         public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

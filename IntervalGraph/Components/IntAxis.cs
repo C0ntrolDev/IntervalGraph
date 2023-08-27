@@ -12,7 +12,11 @@ namespace IntervalGraph.Components
 {
     public class IntAxis : Freezable, INotifyPropertyChanged
     {
+        private double _lastZoom = 1;
+
         #region Dependency properties
+
+        #region Axis
 
         #region AxisColorBrushProperty
 
@@ -46,6 +50,42 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region CirclesRadiusProperty
+
+        public static readonly DependencyProperty CirclesRadiusProperty = DependencyProperty.Register(
+            nameof(CirclesRadius),
+            typeof(double),
+            typeof(IntAxis),
+            new PropertyMetadata(3.0));
+
+        public double CirclesRadius
+        {
+            get => (double)GetValue(CirclesRadiusProperty);
+            set => SetValue(CirclesRadiusProperty, value);
+        }
+
+        #endregion
+
+        #region CirclesThicknessProperty
+
+        public static readonly DependencyProperty CirclesThicknessProperty = DependencyProperty.Register(
+            nameof(CirclesThickness),
+            typeof(double),
+            typeof(IntAxis),
+            new PropertyMetadata(2.0));
+
+        public double CirclesThickness
+        {
+            get => (double)GetValue(CirclesThicknessProperty);
+            set => SetValue(CirclesThicknessProperty, value);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Text
+
         #region NumStepProperty
 
         public static readonly DependencyProperty NumStepProperty = DependencyProperty.Register(
@@ -62,18 +102,18 @@ namespace IntervalGraph.Components
 
         #endregion
 
-        #region TextBrushProperty
+        #region TextColorBrushProperty
 
-        public static readonly DependencyProperty TextBrushProperty = DependencyProperty.Register(
-            nameof(TextBrush),
+        public static readonly DependencyProperty TextColorBrushProperty = DependencyProperty.Register(
+            nameof(TextColorBrush),
             typeof(Brush),
             typeof(IntAxis),
             new PropertyMetadata(Brushes.Black));
 
-        public Brush TextBrush
+        public Brush TextColorBrush
         {
-            get => (Brush)GetValue(TextBrushProperty);
-            set => SetValue(TextBrushProperty, value);
+            get => (Brush)GetValue(TextColorBrushProperty);
+            set => SetValue(TextColorBrushProperty, value);
         }
 
         #endregion
@@ -94,13 +134,29 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region FontSizeProperty
+
+        public static readonly DependencyProperty FontSizeProperty = DependencyProperty.Register(
+            nameof(FontSize),
+            typeof(double?),
+            typeof(IntAxis),
+            new PropertyMetadata(null));
+
+        public double? FontSize
+        {
+            get => (double?)GetValue(FontSizeProperty);
+            set => SetValue(FontSizeProperty, value);
+        }
+
+        #endregion
+
         #region MinFontSizeProperty
 
         public static readonly DependencyProperty MinFontSizeProperty = DependencyProperty.Register(
             nameof(MinFontSize),
             typeof(double),
             typeof(IntAxis),
-            new PropertyMetadata(15.0));
+            new PropertyMetadata(15.0, UpdateTextFontSize));
 
         public double MinFontSize
         {
@@ -116,7 +172,16 @@ namespace IntervalGraph.Components
             nameof(MaxFontSize),
             typeof(double),
             typeof(IntAxis),
-            new PropertyMetadata(15.0));
+            new PropertyMetadata(15.0, OnMaxFontSizeChanged));
+
+        private static void OnMaxFontSizeChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (dependencyObject is IntAxis intAxis)
+            {
+                intAxis.UpdateTextFontSize(intAxis._lastZoom);
+                intAxis.OnPropertyChanged(nameof(intAxis.TextContainerHeight));
+            }
+        }
 
         public double MaxFontSize
         {
@@ -132,7 +197,7 @@ namespace IntervalGraph.Components
             nameof(MinZoom),
             typeof(double),
             typeof(IntAxis),
-            new PropertyMetadata(1.0));
+            new PropertyMetadata(1.0, UpdateTextFontSize));
 
         public double MinZoom
         {
@@ -148,7 +213,7 @@ namespace IntervalGraph.Components
             nameof(MaxZoom),
             typeof(double),
             typeof(IntAxis),
-            new PropertyMetadata(1.0));
+            new PropertyMetadata(1.0, UpdateTextFontSize));
 
         public double MaxZoom
         {
@@ -161,6 +226,8 @@ namespace IntervalGraph.Components
         #endregion
 
 
+
+        #endregion
 
 
         #region DrawedFontSize
@@ -175,11 +242,48 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region TextContainerHeight
 
+        public GridLength TextContainerHeight
+        {
+            get
+            {
+                if (FontSize != null) return new GridLength((double)FontSize * 1.5);
+                return new GridLength(MaxFontSize * 1.5);
+            }
+        }
+
+        #endregion
+
+
+        private static void UpdateTextFontSize(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (dependencyObject is IntAxis intAxis)
+            {
+                intAxis.UpdateTextFontSize(intAxis._lastZoom);
+            }
+        }
         public void UpdateTextFontSize(double zoom)
         {
-            if (zoom - MinZoom < 0) DrawedFontSize = MinFontSize;
-            if (MaxZoom - zoom < 0) DrawedFontSize = MaxZoom;
+            _lastZoom = zoom;
+
+            if (FontSize != null)
+            {
+                DrawedFontSize = (double)FontSize;
+                return;
+            }
+
+            if (zoom - MinZoom < 0)
+            {
+                DrawedFontSize = MinFontSize;
+                return;
+            }
+
+            if (MaxZoom - zoom < 0)
+            {
+                DrawedFontSize = MaxFontSize;
+                return;
+            }
 
             double fontSizeRange = MaxFontSize - MinFontSize;
             double limitedZoom = zoom - MinZoom;
@@ -188,8 +292,9 @@ namespace IntervalGraph.Components
             DrawedFontSize = MinFontSize + (fontSizeRange * (limitedZoom / zoomRange));
         }
 
-        protected override Freezable CreateInstanceCore() => new IntAxis();
 
+
+        protected override Freezable CreateInstanceCore() => new IntAxis();
 
 
 

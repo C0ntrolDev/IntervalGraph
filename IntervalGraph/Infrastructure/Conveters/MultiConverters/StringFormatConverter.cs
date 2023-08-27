@@ -2,7 +2,7 @@
 using System.Globalization;
 using IntervalGraph.Infrastructure.Conveters.Base;
 
-namespace IntervalGraph.Infrastructure.Conveters.GraphConverters.MultiConverters
+namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 {
     class StringFormatConverter : MultiMarkupConverter
     {

@@ -25,12 +25,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
 
-        <Slider x:Name="Slider" Grid.Row="0" Grid.RowSpan="2" Margin="20"  Grid.Column="0" Maximum="6" Minimum="1" Orientation="Vertical" IsDirectionReversed="True"/>
-
+        <Slider x:Name="Slider" Grid.Row="0" Grid.RowSpan="2" Margin="20"  Grid.Column="0" Maximum="10" Minimum="1" Orientation="Vertical" IsDirectionReversed="True"/>
         <Grid Grid.Row="1" Grid.Column="1" MinWidth="200" MaxWidth="1000" Margin="40" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext}">
-            <c:IntervalGraph x:Name="NewGraph" Zoom="{Binding ElementName=Slider, Path=Value}" GraphIntervals="{Binding GraphIntervals}" IsIntervalHeightDependToWidth="True" MaxStableIntervalHeight="0.3" MaxIntervalHeight="1">
+            <c:IntervalGraph x:Name="NewGraph" Zoom="{Binding ElementName=Slider, Path=Value}" GraphIntervals="{Binding GraphIntervals}" 
+                             IsIntervalHeightDependToWidth="True" MaxStableIntervalHeight="0.5" MaxIntervalHeight="0.9" MinValue="0" MaxValue="48"
+                             MinorStep="1" MajorStep="5" MinorThickness="0.5" MajorThickness="1.5" MinorColorBrush="Gray" MajorColorBrush="Black">
                 <c:IntervalGraph.IntAxis>
-                    <c:IntAxis>
+                    <c:IntAxis MinZoom="1" MaxZoom="10" MinFontSize="15" MaxFontSize="20" AxisThickness="4" NumStep="5" CirclesRadius="3" CirclesThickness="2">
                         <c:IntAxis.TextFormat>
                             {0}ч
                         </c:IntAxis.TextFormat>

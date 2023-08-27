@@ -6,7 +6,7 @@ using System.Windows.Media;
 using IntervalGraph.Infrastructure.Conveters.Base;
 using IntervalGraph.Models.Graph;
 
-namespace IntervalGraph.Infrastructure.Conveters.GraphConverters.MultiConverters
+namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 {
     class GraphIntervalToGeometry : MultiMarkupConverter
     {
