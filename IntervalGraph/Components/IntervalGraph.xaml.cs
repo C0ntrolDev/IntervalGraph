@@ -44,22 +44,6 @@ namespace IntervalGraph.Components
 
         #endregion
 
-        #region LegendProperty
-
-        public static readonly DependencyProperty LegendProperty = DependencyProperty.Register(
-            nameof(Legend),
-            typeof(Legend),
-            typeof(IntervalGraph),
-            new PropertyMetadata(new Legend()));
-
-        public Legend Legend
-        {
-            get => (Legend)GetValue(LegendProperty);
-            set => SetValue(LegendProperty, value);
-        }
-
-        #endregion
-
         #endregion
 
         #region DependencyProperties
