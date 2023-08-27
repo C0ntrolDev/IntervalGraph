@@ -3,9 +3,9 @@ using System.Globalization;
 using System.Windows.Data;
 using IntervalGraph.Infrastructure.Conveters.Base;
 
-namespace IntervalGraph.Infrastructure.Conveters.GraphConverters.Converters
+namespace IntervalGraph.Infrastructure.Conveters.Converters
 {
-    internal class CompositeConverter : MarkupConverter
+    public class CompositeConverter : MarkupConverter
     {
         public IValueConverter First { get; set; }
         public IValueConverter Second { get; set; }

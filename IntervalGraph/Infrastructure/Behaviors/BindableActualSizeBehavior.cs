@@ -8,7 +8,7 @@ using Microsoft.Xaml.Behaviors;
 
 namespace IntervalGraph.Infrastructure.Behaviors
 {
-    internal class BindableActualSizeBehavior : Behavior<FrameworkElement>
+    public class BindableActualSizeBehavior : Behavior<FrameworkElement>
     {
         #region ActualWidthProperty
 
@@ -16,7 +16,7 @@ namespace IntervalGraph.Infrastructure.Behaviors
             nameof(ActualWidth),
             typeof(double),
             typeof(BindableActualSizeBehavior),
-            new PropertyMetadata(default(double)));
+            new FrameworkPropertyMetadata());
 
         public double ActualWidth
         {
@@ -32,7 +32,7 @@ namespace IntervalGraph.Infrastructure.Behaviors
             nameof(ActualHeight),
             typeof(double),
             typeof(BindableActualSizeBehavior),
-            new PropertyMetadata(default(double)));
+            new FrameworkPropertyMetadata());
 
         public double ActualHeight
         {
@@ -46,13 +46,15 @@ namespace IntervalGraph.Infrastructure.Behaviors
         protected override void OnAttached()
         {
             base.OnAttached();
-            base.AssociatedObject.SizeChanged += OnSizeChanged; 
+            base.AssociatedObject.SizeChanged += OnSizeChanged;
+            base.AssociatedObject.Loaded += OnLoaded;
         }
 
         protected override void OnDetaching()
         {
             base.OnDetaching();
             base.AssociatedObject.SizeChanged -= OnSizeChanged;
+            base.AssociatedObject.Loaded -= OnLoaded;
         }
 
         private void OnSizeChanged(object sender, SizeChangedEventArgs e)
@@ -60,6 +62,13 @@ namespace IntervalGraph.Infrastructure.Behaviors
             ActualWidth = base.AssociatedObject.RenderSize.Width;
             ActualHeight = base.AssociatedObject.RenderSize.Height;
         }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            ActualWidth = base.AssociatedObject.RenderSize.Width;
+            ActualHeight = base.AssociatedObject.RenderSize.Height;
+        }
+
 
     }
 }
