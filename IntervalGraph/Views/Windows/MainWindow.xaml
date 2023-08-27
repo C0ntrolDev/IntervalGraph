@@ -27,8 +27,16 @@
 
         <Slider x:Name="Slider" Grid.Row="0" Grid.RowSpan="2" Margin="20"  Grid.Column="0" Maximum="6" Minimum="1" Orientation="Vertical" IsDirectionReversed="True"/>
 
-        <Grid Grid.Row="1" Grid.Column="1" MinWidth="200" MaxWidth="1000" Margin="40">
-            <c:IntervalGraph x:Name="NewGraph" Zoom="{Binding ElementName=Slider, Path=Value}" MinValue="-10" MaxValue="100"/>
+        <Grid Grid.Row="1" Grid.Column="1" MinWidth="200" MaxWidth="1000" Margin="40" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window, Mode=FindAncestor}, Path=DataContext}">
+            <c:IntervalGraph x:Name="NewGraph" Zoom="{Binding ElementName=Slider, Path=Value}" GraphIntervals="{Binding GraphIntervals}" IsIntervalHeightDependToWidth="True" MaxStableIntervalHeight="0.3" MaxIntervalHeight="1">
+                <c:IntervalGraph.IntAxis>
+                    <c:IntAxis>
+                        <c:IntAxis.TextFormat>
+                            {0}ч
+                        </c:IntAxis.TextFormat>
+                    </c:IntAxis>
+                </c:IntervalGraph.IntAxis>
+            </c:IntervalGraph>
         </Grid>
     </Grid>
 </Window>

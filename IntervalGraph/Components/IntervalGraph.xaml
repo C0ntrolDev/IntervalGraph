@@ -7,6 +7,7 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:b="clr-namespace:IntervalGraph.Infrastructure.Behaviors"
              xmlns:c="clr-namespace:IntervalGraph.Infrastructure.Conveters.GraphConverters.Converters"
+             xmlns:cm="clr-namespace:IntervalGraph.Infrastructure.Conveters.GraphConverters.MultiConverters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
@@ -33,6 +34,11 @@
 
             <Grid Width="{Binding ZoomedGraphWidth}" Background="Transparent">
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
@@ -40,7 +46,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <Grid x:Name="PART_UpperGraph" Grid.Row="0" VerticalAlignment="Stretch">
+                <Grid x:Name="PART_UpperGraph" Grid.Column="1" Grid.Row="0" VerticalAlignment="Stretch">
 
                     <i:Interaction.Behaviors>
                         <b:BindableActualSizeBehavior ActualHeight="{Binding UpperGraphHeight, Mode=OneWayToSource}"/>
@@ -48,7 +54,7 @@
 
                 </Grid>
 
-                <Grid x:Name="PART_Graph" Grid.Row="0" Grid.RowSpan="2" 
+                <Grid x:Name="PART_Graph" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" 
                       VerticalAlignment="Stretch"
                       DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
                       Height="{Binding Path=GraphHeight, Mode=OneWay}">
@@ -69,9 +75,46 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+
+                    <ItemsControl ItemsSource="{Binding GraphIntervals}">
+
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <Grid/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Path Stroke="{Binding StrokeBrush}" StrokeThickness="{Binding StrokeThickness}" StrokeDashArray="{Binding StrokeDashArray}" Fill="{Binding FillBrush}">
+                                    <Path.Data>
+                                        <MultiBinding Converter="{cm:GraphIntervalToGeometry}">
+                                            <Binding/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="ColumnWidth"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="ZoomedGraphWidth"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="GraphHeight"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="DrawedMinValue"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="DrawedMaxValue"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="MaxIntervalHeight"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="MaxStableIntervalHeight"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="IsIntervalHeightDependToWidth"/>
+                                        </MultiBinding> 
+                                    </Path.Data>
+                                </Path>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                 </Grid>
 
-                <Grid x:Name="PART_Axis" Grid.Row="1" Grid.RowSpan="2" >
+                <Grid x:Name="PART_Axis" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" >
 
                     <i:Interaction.Behaviors>
                         <b:BindableActualSizeBehavior ActualHeight="{Binding AxisHeight, Mode=OneWayToSource}"/>
@@ -84,10 +127,11 @@
                           Data="M 0,0 l 0,10 l 15,-5 Z" Fill="Black"/>
                 </Grid>
 
-                <Grid x:Name="PART_UnderGraphNumbers" Grid.Row="3"
-                      DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
+                <Grid x:Name="PART_UnderGraphNumbers" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3"
+                      DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
+                      Width="{Binding ZoomedGraphWidth}">
 
-                    <ItemsControl ItemsSource="{Binding AxisValues}" BorderThickness="0">
+                    <ItemsControl ItemsSource="{Binding AxisValues}" HorizontalAlignment="Right">
 
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
@@ -98,7 +142,14 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Grid Width="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=ColumnWidth}">
-                                    <TextBlock Text="{Binding}"/>
+                                    <TextBlock>
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{cm:StringFormatConverter}">
+                                                <Binding/>
+                                                <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" Path="IntAxis.TextFormat"/>
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </Grid>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

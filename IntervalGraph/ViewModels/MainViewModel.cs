@@ -28,11 +28,6 @@ namespace IntervalGraph.ViewModels
                 {
                     Interval = new Interval()
                     {
-                        FirstPoint = new IntervalPoint<int>()
-                        {
-                            X = 0
-                        },
-
                         LastPoint = new IntervalPoint<int>()
                         {
                             X = 32

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics.Eventing.Reader;
 using System.Linq;
@@ -33,7 +34,7 @@ namespace IntervalGraph.Components
             nameof(IntAxis),
             typeof(IntAxis),
             typeof(IntervalGraph),
-            new PropertyMetadata(default(IntAxis)));
+            new PropertyMetadata(new IntAxis()));
 
         public IntAxis IntAxis
         {
@@ -49,7 +50,7 @@ namespace IntervalGraph.Components
             nameof(Legend),
             typeof(Legend),
             typeof(IntervalGraph),
-            new PropertyMetadata(default(Legend)));
+            new PropertyMetadata(new Legend()));
 
         public Legend Legend
         {
@@ -144,12 +145,22 @@ namespace IntervalGraph.Components
             nameof(GraphIntervals),
             typeof(ObservableCollection<GraphInterval>),
             typeof(IntervalGraph),
-            new PropertyMetadata(null));
+            new PropertyMetadata(null, OnGraphIntervalsChanged));
+
+        private static void OnGraphIntervalsChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (dependencyObject is IntervalGraph intervalGraph && 
+                e.NewValue is ObservableCollection<GraphInterval> graphIntervals)
+            {
+                graphIntervals.CollectionChanged += (s, e) => intervalGraph.AdaptGraphToNewValues();
+                intervalGraph.AdaptGraphToNewValues();
+            }
+        }
 
         public ObservableCollection<GraphInterval> GraphIntervals
         {
-            get { return (ObservableCollection<GraphInterval>)GetValue(GraphIntervalsProperty); }
-            set { SetValue(GraphIntervalsProperty, value); }
+            get => (ObservableCollection<GraphInterval>)GetValue(GraphIntervalsProperty);
+            set => SetValue(GraphIntervalsProperty, value);
         }
 
         #endregion
@@ -164,7 +175,11 @@ namespace IntervalGraph.Components
 
         private static void OnZoomChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
-            if (dependencyObject is IntervalGraph intervalGraph) intervalGraph.UpdateZoomedGraphWidth();
+            if (dependencyObject is IntervalGraph intervalGraph)
+            {
+                intervalGraph.UpdateZoomedGraphWidth();
+            }
+
         }
         private static object OnCoerceZoom(DependencyObject dependencyObject, object basevalue)
         {
@@ -290,13 +305,54 @@ namespace IntervalGraph.Components
 
         #endregion
 
+
+        #region IsIntervalHeightDependToWidthProperty
+
+        public static readonly DependencyProperty IsIntervalHeightDependToWidthProperty = DependencyProperty.Register(
+            nameof(IsIntervalHeightDependToWidth),
+            typeof(bool),
+            typeof(IntervalGraph),
+            new PropertyMetadata(default(bool)));
+
+        /// <summary>
+        /// Will the height of the displayed graph depend on its length (longer => higher)
+        /// </summary>
+        public bool IsIntervalHeightDependToWidth
+        {
+            get => (bool)GetValue(IsIntervalHeightDependToWidthProperty);
+            set => SetValue(IsIntervalHeightDependToWidthProperty, value);
+        }
+
+        #endregion
+
+        #region MaxStableIntervalHeightProperty
+
+        public static readonly DependencyProperty MaxStableIntervalHeightProperty = DependencyProperty.Register(
+            nameof(MaxStableIntervalHeight),
+            typeof(double),
+            typeof(IntervalGraph),
+            new PropertyMetadata(0.5));
+
+        /// <summary>
+        /// The minimum height of the graph, which will be necessarily reached. Calculated relative to MaxIntervalHeight.
+        /// Set from 0 to 1.
+        /// If the value is less than 1, the remaining distance will be calculated relative to the width of the interval
+        /// </summary>
+        public double MaxStableIntervalHeight
+        {
+            get => (double)GetValue(MaxStableIntervalHeightProperty);
+            set => SetValue(MaxStableIntervalHeightProperty, value);
+        }
+
+        #endregion
+
         #region MaxIntervalHeightProperty
 
         public static readonly DependencyProperty MaxIntervalHeightProperty = DependencyProperty.Register(
             nameof(MaxIntervalHeight),
             typeof(double),
             typeof(IntervalGraph),
-            new PropertyMetadata(default(double)));
+            new PropertyMetadata(0.7));
 
         /// <summary>
         /// Calculated relative to the height of the graph (from 0 to 1)
@@ -313,7 +369,6 @@ namespace IntervalGraph.Components
 
         #endregion
 
-
         #region Properties
 
         #region DrawedMinValue
@@ -323,7 +378,15 @@ namespace IntervalGraph.Components
         public int DrawedMinValue
         {
             get => _drawedMinValue;
-            set => Set(ref _drawedMinValue, value);
+            set
+            {
+                Set(ref _drawedMinValue, value);
+                if (DrawedMinValue < DrawedMaxValue)
+                {
+                    OnPropertyChanged(nameof(AxisValues));
+                }
+               
+            }
         }
 
         #endregion
@@ -335,13 +398,20 @@ namespace IntervalGraph.Components
         public int DrawedMaxValue
         {
             get => _drawedMaxValue;
-            set => Set(ref _drawedMaxValue, value);
+            set
+            {
+                Set(ref _drawedMaxValue, value);
+                if (DrawedMinValue < DrawedMaxValue)
+                {
+                    OnPropertyChanged(nameof(AxisValues));
+                }
+            }
         }
 
         #endregion
 
         public int ColumnCount => DrawedMaxValue - DrawedMinValue + 1;
-        public IEnumerable<int> AxisValues => Enumerable.Range(DrawedMinValue, ColumnCount +1 );
+        public IEnumerable<int?> AxisValues => Enumerable.Range(DrawedMinValue, ColumnCount).Select(i => (int?)i).Append(null);
 
         #region ColumnWidth
 
@@ -430,17 +500,20 @@ namespace IntervalGraph.Components
 
         #endregion
 
+
         public IntervalGraph()
         {
             InitializeComponent();
         }
+
+
 
         private void AdaptGraphToNewValues()
         {
             if (GraphIntervals != null && GraphIntervals.Count != 0)
             {
                 List<int> AllPoints = GraphIntervals
-                    .Select(gi => new int?[] { gi.Interval?.FirstPoint.X, gi.Interval?.LastPoint.X })
+                    .Select(gi => new int?[] { gi.Interval?.FirstPoint?.X, gi.Interval?.LastPoint?.X })
                     .SelectMany(ip => ip)
                     .Where(p => p != null)
                     .Select(p => (int)p)
@@ -489,7 +562,7 @@ namespace IntervalGraph.Components
                 {
                     ZoomedGraphWidth = GraphWidth;
                 }
-                
+
             }
             else
             {

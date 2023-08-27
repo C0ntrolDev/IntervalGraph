@@ -12,79 +12,120 @@ namespace IntervalGraph.Infrastructure.Conveters.GraphConverters.MultiConverters
     {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length != 7) throw new InvalidOperationException("Values задано не верно. Шаблон: Интервал, Ширина_столбца, Высота_столбца, Мин_знач, Мак_знач, Коэффицент_доп_высоты_от_длинны, Коэффицент_ширины_линии");
+            if (values.Length != 9) throw new InvalidOperationException("Values is not set correctly. Template: GraphInterval, ColumnWidth, GraphWidth, GraphHeight, MinValue, MaxValue, MaxIntervalHeight, MaxStableIntervalHeight, IsIntervalHeightDependToWidth");
 
             GraphInterval interval = (GraphInterval)values[0];
 
             double columnWidth = System.Convert.ToDouble(values[1]);
-            double columnHeight = System.Convert.ToDouble(values[2]);
 
-            double minValue = System.Convert.ToDouble(values[3]);
-            double maxValue = System.Convert.ToDouble(values[4]);
+            double graphWidth = System.Convert.ToDouble(values[2]);
+            double graphHeight = System.Convert.ToDouble(values[3]);
 
-            double stableRatio = System.Convert.ToDouble(values[5]);
-            double ratio = System.Convert.ToDouble(values[6]);
+            double minValue = System.Convert.ToDouble(values[4]);
+            double maxValue = System.Convert.ToDouble(values[5]);
+
+            double maxIntervalHeight = System.Convert.ToDouble(values[6]);
+            double maxStableIntervalHeight = System.Convert.ToDouble(values[7]);
+
+            bool isIntervalHeightDependToWidth = System.Convert.ToBoolean(values[8]);
 
 
-            double axisLength = (maxValue - minValue) * columnWidth;
-            double graphLength = (interval.Interval.LastPoint.X - interval.Interval.FirstPoint.X) * columnWidth;
 
-            double startIntervalPoint = interval.Interval.FirstPoint.X * columnWidth;
-            double endIntervalPoint = interval.Interval.LastPoint.X * columnWidth;
 
-            double maxStableHeight = columnHeight * stableRatio;
-            double maxHeight = maxStableHeight + ratio * columnHeight * (graphLength / axisLength);
+            double? firstPoint = interval.Interval.FirstPoint?.X;
+            double? lastPoint = interval.Interval.LastPoint?.X;
 
-            double realMaxHeight = columnHeight - maxHeight;
+            if (firstPoint == null && lastPoint == null) return null;
+
+            double intervalHeight;
+            double intervalWidth = CalculateIntervalLength(firstPoint, lastPoint, minValue, maxValue) * columnWidth;
+
+            if (isIntervalHeightDependToWidth)
+            {
+                double maxAvailableIntervalsHeigth = graphHeight * maxIntervalHeight;
+
+                double heightRatio = intervalWidth / graphWidth;
+                double stableHeight = maxAvailableIntervalsHeigth * maxStableIntervalHeight;
+                double unstableHeight = heightRatio * maxAvailableIntervalsHeigth * (1 - maxStableIntervalHeight);
+
+                intervalHeight = stableHeight + unstableHeight;
+            }
+            else
+            {
+                intervalHeight = graphHeight * maxIntervalHeight;
+            }
+
 
 
             List<PathSegment> allSegments = new List<PathSegment>();
 
-
             double segmentLength;
-            if (graphLength / 2 > maxHeight)
+            if (intervalWidth / 2 > intervalHeight)
             {
-                segmentLength = maxHeight;
+                segmentLength = intervalHeight;
             }
             else
             {
-                segmentLength = graphLength / 2;
+                segmentLength = intervalWidth / 2;
             }
 
+            double startDrawingPoint = (firstPoint - minValue) * columnWidth ?? 0;
+            double endDrawingPoint = startDrawingPoint + intervalWidth;
+            double intervalHeightY = graphHeight - intervalHeight;
 
-            if (interval.Interval.FirstPoint.X <= minValue)
+            if (firstPoint == null)
             {
-                allSegments.Add(CreateInvisibleLineSegment(new Point(startIntervalPoint, realMaxHeight)));
-                allSegments.Add(CreateHorizontalLineSegment(new Point(segmentLength + startIntervalPoint, realMaxHeight)));
+                allSegments.Add(CreateInvisibleLineSegment(new Point(0, intervalHeightY)));
+                allSegments.Add(CreateHorizontalLineSegment(new Point(segmentLength + startDrawingPoint, intervalHeightY)));
             }
             else
             {
-                allSegments.Add(CreateInvisibleLineSegment(new Point(startIntervalPoint, columnHeight)));
-                allSegments.Add(CreateArcSegment(segmentLength, maxHeight, new Point(segmentLength + startIntervalPoint, realMaxHeight)));
+                allSegments.Add(CreateInvisibleLineSegment(new Point(startDrawingPoint, graphHeight)));
+                allSegments.Add(CreateArcSegment(segmentLength, intervalHeight, new Point(segmentLength + startDrawingPoint, intervalHeightY)));
             }
 
 
-            if (segmentLength == maxHeight)
+            if (segmentLength == intervalHeight)
             {
-                allSegments.Add(CreateHorizontalLineSegment(new Point(endIntervalPoint - segmentLength, realMaxHeight)));
+                allSegments.Add(CreateHorizontalLineSegment(new Point(endDrawingPoint - segmentLength, intervalHeightY)));
             }
 
 
-            if (interval.Interval.LastPoint.X >= maxValue)
+            if (lastPoint == null)
             {
-                allSegments.Add(CreateHorizontalLineSegment(new Point(axisLength, realMaxHeight)));
-                allSegments.Add(CreateInvisibleLineSegment(new Point(axisLength, columnHeight)));
+                allSegments.Add(CreateHorizontalLineSegment(new Point(graphWidth, intervalHeightY)));
+                allSegments.Add(CreateInvisibleLineSegment(new Point(graphWidth, graphHeight)));
             }
             else
             {
-                allSegments.Add(CreateArcSegment(segmentLength, maxHeight, new Point(endIntervalPoint, columnHeight)));
+                allSegments.Add(CreateArcSegment(segmentLength, intervalHeight, new Point(endDrawingPoint, graphHeight)));
             }
 
 
-            PathFigure figure = new PathFigure(new Point(0,columnHeight), allSegments, false);
+            PathFigure figure = new PathFigure(new Point(0, graphHeight), allSegments, false);
             PathGeometry geometry = new PathGeometry(new List<PathFigure>() { figure });
 
             return geometry;
+        }
+
+        private double CalculateIntervalLength(double? firstPoint, double? lastPoint, double minValue, double maxValue)
+        {
+            double intervalLength;
+
+            if (firstPoint == null)
+            {
+                intervalLength = (double)lastPoint! - minValue;
+            }
+            else if (lastPoint == null)
+            {
+                intervalLength = maxValue - (double)firstPoint;
+            }
+            else
+            {
+                intervalLength = (double)lastPoint - (double)firstPoint;
+            }
+
+            return intervalLength;
         }
 
         private ArcSegment CreateArcSegment(double width, double height, Point endPoint)
@@ -117,7 +158,7 @@ namespace IntervalGraph.Infrastructure.Conveters.GraphConverters.MultiConverters
         }
 
         public override object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) =>
-            throw new InvalidOperationException("Данный конвертер не предназначен для обратных преобразований");
+            throw new InvalidOperationException("This converter is not intended for reverse conversions");
 
     }
 }

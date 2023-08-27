@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace IntervalGraph.Components
 {
-    public class Legend : DependencyObject
+    public class Legend : Freezable
     {
         #region ForegroundProperty
 
@@ -90,5 +90,6 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        protected override Freezable CreateInstanceCore() => new Legend();
     }
 }
