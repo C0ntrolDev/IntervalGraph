@@ -234,6 +234,7 @@ namespace IntervalGraph.Components
 
         private double _drawedFontSize;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double DrawedFontSize
         {
             get => _drawedFontSize;
@@ -244,6 +245,7 @@ namespace IntervalGraph.Components
 
         #region TextContainerHeight
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public GridLength TextContainerHeight
         {
             get

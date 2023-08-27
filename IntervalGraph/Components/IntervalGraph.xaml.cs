@@ -360,6 +360,7 @@ namespace IntervalGraph.Components
 
         private int _drawedMinValue;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int DrawedMinValue
         {
             get => _drawedMinValue;
@@ -380,6 +381,7 @@ namespace IntervalGraph.Components
 
         private int _drawedMaxValue;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int DrawedMaxValue
         {
             get => _drawedMaxValue;
@@ -395,13 +397,17 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int ColumnCount => DrawedMaxValue - DrawedMinValue + 1;
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public IEnumerable<int?> AxisValues => Enumerable.Range(DrawedMinValue, ColumnCount).Select(i => (int?)i);
 
         #region ColumnWidth
 
         private double _columnWidth;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double ColumnWidth
         {
             get => _columnWidth;
@@ -415,6 +421,7 @@ namespace IntervalGraph.Components
         private double _startGraphWidth;
         private double _graphWidth;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double GraphWidth
         {
             get => _graphWidth;
@@ -437,6 +444,7 @@ namespace IntervalGraph.Components
 
         private double _zoomedGraphWidth;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double ZoomedGraphWidth
         {
             get => _zoomedGraphWidth;
@@ -453,6 +461,7 @@ namespace IntervalGraph.Components
 
         private double _axisHeight;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double AxisHeight
         {
             get => _axisHeight;
@@ -469,6 +478,7 @@ namespace IntervalGraph.Components
 
         private double _upperGraphHeight;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double UpperGraphHeight
         {
             get => _upperGraphHeight;
@@ -481,6 +491,7 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double GraphHeight => AxisHeight + UpperGraphHeight;
 
         #endregion
