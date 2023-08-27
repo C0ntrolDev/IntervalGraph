@@ -5,7 +5,7 @@ using IntervalGraph.Infrastructure.Conveters.Base;
 
 namespace IntervalGraph.Infrastructure.Conveters.Converters
 {
-    internal class CompositeConverter : MarkupConverter
+    public class CompositeConverter : MarkupConverter
     {
         public IValueConverter First { get; set; }
         public IValueConverter Second { get; set; }

@@ -5,7 +5,7 @@ using IntervalGraph.Infrastructure.Conveters.Base;
 
 namespace IntervalGraph.Infrastructure.Conveters.Converters
 {
-    class DoubleToMarginConverter : MarkupConverter
+    public class DoubleToMarginConverter : MarkupConverter
     {
         public Thickness BoolMargin { get; set; } = new Thickness(1, 1, 1, 1);
 

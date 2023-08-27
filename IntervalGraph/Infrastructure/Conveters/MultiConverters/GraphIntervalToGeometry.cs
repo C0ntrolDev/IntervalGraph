@@ -8,7 +8,7 @@ using IntervalGraph.Models.Graph;
 
 namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 {
-    class GraphIntervalToGeometry : MultiMarkupConverter
+    public class GraphIntervalToGeometry : MultiMarkupConverter
     {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

@@ -4,7 +4,7 @@ using IntervalGraph.Infrastructure.Conveters.Base;
 
 namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 {
-    class StringFormatConverter : MultiMarkupConverter
+    public class StringFormatConverter : MultiMarkupConverter
     {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

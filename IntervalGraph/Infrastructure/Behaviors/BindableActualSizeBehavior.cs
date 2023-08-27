@@ -8,7 +8,7 @@ using Microsoft.Xaml.Behaviors;
 
 namespace IntervalGraph.Infrastructure.Behaviors
 {
-    internal class BindableActualSizeBehavior : Behavior<FrameworkElement>
+    public class BindableActualSizeBehavior : Behavior<FrameworkElement>
     {
         #region ActualWidthProperty
 
