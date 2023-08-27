@@ -94,7 +94,7 @@ namespace IntervalGraph.ViewModels
 
                     StrokeBrush = Brushes.Red,
                     FillBrush = new SolidColorBrush(Color.FromArgb(30,255,0,0)),
-                    Name = "Просто интервал"
+                    LegendName = "Просто интервал"
                 },
                 
             };

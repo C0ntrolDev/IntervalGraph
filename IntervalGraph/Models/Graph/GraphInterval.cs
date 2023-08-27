@@ -13,7 +13,7 @@ namespace IntervalGraph.Models.Graph
         public Brush FillBrush { get; set; } = Brushes.Black;
 
         public object Icon { get; set; }
-        public string Name { get; set; } = "";
+        public string LegendName { get; set; } = "";
         public bool IsEnabled { get; set; } = true;
     }
 

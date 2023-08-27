@@ -8,22 +8,14 @@
              xmlns:b="clr-namespace:IntervalGraph.Infrastructure.Behaviors"
              xmlns:cm="clr-namespace:IntervalGraph.Infrastructure.Conveters.MultiConverters"
              xmlns:c="clr-namespace:IntervalGraph.Infrastructure.Conveters.Converters"
+             xmlns:graph="clr-namespace:IntervalGraph.Models.Graph"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="White">
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-
-        <Grid x:Name="PART_Legend" Grid.Column="0">
-
-        </Grid>
-
-        <ScrollViewer Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+        <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible"
                       DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
                       BorderThickness="0">
@@ -102,7 +94,7 @@
                                         </Line.Style>
                                     </Line>
                                 </Grid>
-                               
+
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
@@ -137,7 +129,7 @@
                                                      Path="MaxStableIntervalHeight"/>
                                             <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
                                                      Path="IsIntervalHeightDependToWidth"/>
-                                        </MultiBinding> 
+                                        </MultiBinding>
                                     </Path.Data>
                                 </Path>
                             </DataTemplate>
@@ -253,6 +245,6 @@
         </ScrollViewer>
 
     </Grid>
-    
-    
+
+
 </UserControl>
