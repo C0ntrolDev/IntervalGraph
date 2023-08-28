@@ -42,7 +42,7 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 
             if (interval.Height != null)
             {
-                intervalHeight = (double)interval.Height;
+                intervalHeight = graphHeight * (double)interval.Height;
             }
             else
             {
