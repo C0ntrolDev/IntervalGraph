@@ -32,8 +32,8 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 
 
 
-            double? firstPoint = interval.Interval.FirstPoint?.X;
-            double? lastPoint = interval.Interval.LastPoint?.X;
+            double? firstPoint = interval?.FirstPoint?.X;
+            double? lastPoint = interval?.LastPoint?.X;
 
             if (firstPoint == null && lastPoint == null) return null;
 

@@ -16,8 +16,8 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
             double columnWidth = System.Convert.ToDouble(values[1]);
             double circleRadius = System.Convert.ToDouble(values[2]);
 
-            PathFigure firstCircle = CreateCircle(interval.Interval.FirstPoint, columnWidth, circleRadius);
-            PathFigure lastCircle = CreateCircle(interval.Interval.LastPoint, columnWidth, circleRadius);
+            PathFigure firstCircle = CreateCircle(interval.FirstPoint, columnWidth, circleRadius);
+            PathFigure lastCircle = CreateCircle(interval.LastPoint, columnWidth, circleRadius);
 
 
             PathGeometry geometry = new PathGeometry();
@@ -45,12 +45,12 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
             };
         }
 
-        private PathFigure? CreateCircle(IntervalPoint<int> intervalPoint, double columnWidth, double circleRadius)
+        private PathFigure? CreateCircle(IntervalPoint<double> intervalPoint, double columnWidth, double circleRadius)
         {
-            List<PathSegment> circleSegments = new List<PathSegment>();
-
             if (intervalPoint != null)
             {
+                List<PathSegment> circleSegments = new List<PathSegment>();
+
                 circleSegments.Add(new ArcSegment()
                 {
                     Size = new Size(circleRadius, circleRadius),

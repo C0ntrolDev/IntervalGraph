@@ -509,7 +509,7 @@ namespace IntervalGraph.Components
             if (GraphIntervals != null && GraphIntervals.Count != 0)
             {
                 List<int> AllPoints = GraphIntervals
-                    .Select(gi => new int?[] { gi.Interval?.FirstPoint?.X, gi.Interval?.LastPoint?.X })
+                    .Select(gi => new double?[] { gi?.FirstPoint?.X, gi?.LastPoint?.X })
                     .SelectMany(ip => ip)
                     .Where(p => p != null)
                     .Select(p => (int)p)
