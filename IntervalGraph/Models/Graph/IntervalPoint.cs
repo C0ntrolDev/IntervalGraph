@@ -2,6 +2,8 @@
 {
     public class IntervalPoint
     {
+        public int Id { get; set; }
+
         public double X { get; set; }
         public bool IsInclusive { get; set; } = true;
 
