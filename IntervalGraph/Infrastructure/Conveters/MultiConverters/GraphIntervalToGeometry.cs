@@ -40,20 +40,28 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
             double intervalHeight;
             double intervalWidth = CalculateIntervalLength(firstPoint, lastPoint, minValue, maxValue) * columnWidth;
 
-            if (isIntervalHeightDependToWidth)
+            if (interval.Height != null)
             {
-                double maxAvailableIntervalsHeigth = graphHeight * maxIntervalHeight;
-
-                double heightRatio = intervalWidth / graphWidth;
-                double stableHeight = maxAvailableIntervalsHeigth * maxStableIntervalHeight;
-                double unstableHeight = heightRatio * maxAvailableIntervalsHeigth * (1 - maxStableIntervalHeight);
-
-                intervalHeight = stableHeight + unstableHeight;
+                intervalHeight = (double)interval.Height;
             }
             else
             {
-                intervalHeight = graphHeight * maxIntervalHeight;
+                if (isIntervalHeightDependToWidth)
+                {
+                    double maxAvailableIntervalsHeigth = graphHeight * maxIntervalHeight;
+
+                    double heightRatio = intervalWidth / graphWidth;
+                    double stableHeight = maxAvailableIntervalsHeigth * maxStableIntervalHeight;
+                    double unstableHeight = heightRatio * maxAvailableIntervalsHeigth * (1 - maxStableIntervalHeight);
+
+                    intervalHeight = stableHeight + unstableHeight;
+                }
+                else
+                {
+                    intervalHeight = graphHeight * maxIntervalHeight;
+                }
             }
+            
 
 
 

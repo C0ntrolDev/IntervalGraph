@@ -10,6 +10,11 @@ namespace IntervalGraph.Models.Graph
         public Brush StrokeBrush { get; set; } = Brushes.Black;
         public Brush FillBrush { get; set; } = Brushes.Black;
 
+        /// <summary>
+        /// Calculated relative to the height of the graph (from 0 to 1)
+        /// </summary>
+        public double? Height { get; set; }
+
         public object Icon { get; set; }
         public string LegendName { get; set; } = "";
         public bool IsEnabled { get; set; } = true;
