@@ -4,8 +4,8 @@
     {
         public int Id { get; set; }
 
-        public IntervalPoint FirstPoint { get; set; }
-        public IntervalPoint LastPoint { get; set; }
+        public IntervalPoint? FirstPoint { get; set; }
+        public IntervalPoint? LastPoint { get; set; }
         public bool IsPositive { get; set; }
 
 
