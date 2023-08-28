@@ -194,6 +194,22 @@ namespace IntervalGraph.Components
 
         #region DesignProperties
 
+        #region ScrollViewerStyleProperty
+
+        public static readonly DependencyProperty ScrollViewerStyleProperty = DependencyProperty.Register(
+            nameof(ScrollViewerStyle),
+            typeof(Style),
+            typeof(IntervalGraph),
+            new PropertyMetadata(null));
+
+        public Style ScrollViewerStyle
+        {
+            get => (Style)GetValue(ScrollViewerStyleProperty);
+            set => SetValue(ScrollViewerStyleProperty, value);
+        }
+
+        #endregion
+
         #region MajorColorBrushProperty
 
         public static readonly DependencyProperty MajorColorBrushProperty = DependencyProperty.Register(

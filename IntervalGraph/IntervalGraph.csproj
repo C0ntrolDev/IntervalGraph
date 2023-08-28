@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <Title>IntervalGraph_WPF</Title>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>ControlDev</Authors>
     <Product>IntervalGraph_WPF</Product>
     <Description>Extension for WPF, thanks to which you can create an interval graph. An interval graph is a graph used for the interval method in mathematics.</Description>
@@ -16,6 +16,13 @@
     <Copyright>MIT</Copyright>
     <RepositoryUrl>https://github.com/C0ntrolDev/IntervalGraph</RepositoryUrl>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\..\..\..\ApplicationFrameHost_aFQ3jPHdKc.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />

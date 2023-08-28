@@ -10,15 +10,19 @@
              xmlns:c="clr-namespace:IntervalGraph.Infrastructure.Conveters.Converters"
              xmlns:graph="clr-namespace:IntervalGraph.Models.Graph"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="White">
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style x:Key="DefaultScrollViewerStyle" TargetType="ScrollViewer"/>
+    </UserControl.Resources>
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
 
         <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible"
                       DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
-                      BorderThickness="0">
+                      BorderThickness="0"
+                      Style="{Binding ScrollViewerStyle, TargetNullValue={StaticResource DefaultScrollViewerStyle}}">
 
             <i:Interaction.Behaviors>
                 <b:BindableActualSizeBehavior ActualWidth="{Binding GraphWidth, Mode=OneWayToSource}"/>
