@@ -45,7 +45,7 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
             };
         }
 
-        private PathFigure? CreateCircle(IntervalPoint<double> intervalPoint, double columnWidth, double circleRadius)
+        private PathFigure? CreateCircle(IntervalPoint intervalPoint, double columnWidth, double circleRadius)
         {
             if (intervalPoint != null)
             {

@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace IntervalGraph.Models.Graph
 {
-    public class GraphInterval<T> : Interval<T>
+    public class GraphInterval : Interval
     {
         public List<double> StrokeDashArray { get; set; } = new List<double>() { 1 };
         public double StrokeThickness { get; set; } = 1;
@@ -17,22 +17,20 @@ namespace IntervalGraph.Models.Graph
 
         public GraphInterval() { }
 
-        public GraphInterval(T x1, T x2, string legendName) : base(x1, x2)
+        public GraphInterval(double x1, double x2, string legendName) : base(x1, x2)
         {
             LegendName = legendName;
         }
 
-        public GraphInterval(Interval<T> interval)
+        public GraphInterval(Interval interval)
         {
             FirstPoint = interval.FirstPoint;
             LastPoint = interval.LastPoint;
             IsPositive = interval.IsPositive;
         }
-        public GraphInterval(Interval<T> interval, string legendName) : this(interval)
+        public GraphInterval(Interval interval, string legendName) : this(interval)
         {
             LegendName = legendName;
         }
     }
-
-    public class GraphInterval : GraphInterval<double> { }
 }

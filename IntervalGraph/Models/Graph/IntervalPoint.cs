@@ -1,12 +1,12 @@
 ﻿namespace IntervalGraph.Models.Graph
 {
-    public class IntervalPoint<T>
+    public class IntervalPoint
     {
-        public T X { get; set; }
+        public double X { get; set; }
         public bool IsInclusive { get; set; } = true;
 
         public IntervalPoint() { }
-        public IntervalPoint(T x)
+        public IntervalPoint(double x)
         {
             X = x;
         }
