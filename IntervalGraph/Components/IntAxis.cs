@@ -140,7 +140,7 @@ namespace IntervalGraph.Components
             nameof(FontSize),
             typeof(double?),
             typeof(IntAxis),
-            new PropertyMetadata(null));
+            new PropertyMetadata(null, UpdateTextFontSize));
 
         public double? FontSize
         {

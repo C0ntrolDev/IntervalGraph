@@ -101,8 +101,8 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 
             if (lastPoint == null)
             {
-                allSegments.Add(CreateHorizontalLineSegment(new Point(graphWidth, intervalHeightY)));
-                allSegments.Add(CreateInvisibleLineSegment(new Point(graphWidth, graphHeight)));
+                allSegments.Add(CreateHorizontalLineSegment(new Point(graphWidth - columnWidth, intervalHeightY)));
+                allSegments.Add(CreateInvisibleLineSegment(new Point(graphWidth - columnWidth, graphHeight)));
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 
 namespace IntervalGraph.Models.Graph
@@ -17,8 +18,6 @@ namespace IntervalGraph.Models.Graph
 
         public object Icon { get; set; }
         public string LegendName { get; set; } = "";
-        public bool IsEnabled { get; set; } = true;
-
 
         public GraphInterval() { }
 
@@ -29,13 +28,28 @@ namespace IntervalGraph.Models.Graph
 
         public GraphInterval(Interval interval)
         {
-            FirstPoint = interval.FirstPoint;
-            LastPoint = interval.LastPoint;
+            FirstPoint = (IntervalPoint)interval.FirstPoint.Clone();
+            LastPoint = (IntervalPoint)interval.LastPoint.Clone();
             IsPositive = interval.IsPositive;
         }
         public GraphInterval(Interval interval, string legendName) : this(interval)
         {
             LegendName = legendName;
+        }
+
+
+        public new object Clone()
+        {
+            return new GraphInterval((Interval)base.Clone())
+            {
+                StrokeDashArray = StrokeDashArray,
+                StrokeThickness = StrokeThickness,
+                StrokeBrush = StrokeBrush,
+                FillBrush = FillBrush,
+                Height = Height,
+                Icon = Icon,
+                LegendName = LegendName,
+            };
         }
     }
 }

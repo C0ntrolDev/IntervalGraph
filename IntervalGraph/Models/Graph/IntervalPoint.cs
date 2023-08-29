@@ -1,6 +1,8 @@
-﻿namespace IntervalGraph.Models.Graph
+﻿using System;
+
+namespace IntervalGraph.Models.Graph
 {
-    public class IntervalPoint
+    public class IntervalPoint : ICloneable
     {
         public int Id { get; set; }
 
@@ -11,6 +13,16 @@
         public IntervalPoint(double x)
         {
             X = x;
+        }
+
+        public object Clone()
+        {
+            return new IntervalPoint()
+            {
+                Id = Id,
+                IsInclusive = IsInclusive,
+                X = X
+            };
         }
     }
 }

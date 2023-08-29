@@ -1,6 +1,8 @@
-﻿namespace IntervalGraph.Models.Graph
+﻿using System;
+
+namespace IntervalGraph.Models.Graph
 {
-    public class Interval
+    public class Interval : ICloneable
     {
         public int Id { get; set; }
 
@@ -25,5 +27,17 @@
         }
 
         public Interval(double? x1) : this(x1, x1) { }
+
+
+        public object Clone()
+        {
+            return new Interval()
+            {
+                Id = Id,
+                FirstPoint = (IntervalPoint)FirstPoint.Clone(),
+                LastPoint = (IntervalPoint)LastPoint.Clone(),
+                IsPositive = IsPositive
+            };
+        }
     }
 }
