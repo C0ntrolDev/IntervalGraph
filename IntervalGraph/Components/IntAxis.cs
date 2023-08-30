@@ -118,6 +118,22 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region FontFamilyProperty
+
+        public static readonly DependencyProperty FontFamilyProperty = DependencyProperty.Register(
+            nameof(FontFamily),
+            typeof(FontFamily),
+            typeof(IntAxis),
+            new PropertyMetadata(default(FontFamily)));
+
+        public FontFamily FontFamily
+        {
+            get => (FontFamily)GetValue(FontFamilyProperty);
+            set => SetValue(FontFamilyProperty, value);
+        }
+
+        #endregion
+
         #region TextFormatProperty
 
         public static readonly DependencyProperty TextFormatProperty = DependencyProperty.Register(
@@ -224,8 +240,6 @@ namespace IntervalGraph.Components
         #endregion
 
         #endregion
-
-
 
         #endregion
 
