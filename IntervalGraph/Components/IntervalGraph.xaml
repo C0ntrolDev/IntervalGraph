@@ -111,11 +111,17 @@
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
 
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="Grid.ZIndex" Value="{Binding ZIndex}"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
+
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <Path Stroke="{Binding StrokeBrush}" StrokeThickness="{Binding StrokeThickness}" StrokeDashArray="{Binding StrokeDashArray}" Fill="{Binding FillBrush}">
                                     <Path.Data>
-                                        <MultiBinding Converter="{cm:GraphIntervalToGeometry}">
+                                        <MultiBinding Converter="{cm:GraphIntervalToGeometryConverter}">
                                             <Binding/>
                                             <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
                                                      Path="ColumnWidth"/>
@@ -173,10 +179,12 @@
                                       VerticalAlignment="Center">
 
                                     <Path.Data>
-                                        <MultiBinding Converter="{cm:GraphIntervalToAxisCircle}">
+                                        <MultiBinding Converter="{cm:GraphIntervalToAxisCircleConverter}">
                                             <Binding/>
                                             <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
                                                      Path="ColumnWidth"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="DrawedMinValue"/>
                                             <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
                                                      Path="IntAxis.CirclesRadius"/>
                                         </MultiBinding>

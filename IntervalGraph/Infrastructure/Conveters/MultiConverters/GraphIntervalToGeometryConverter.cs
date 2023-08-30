@@ -8,7 +8,7 @@ using IntervalGraph.Models.Graph;
 
 namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 {
-    public class GraphIntervalToGeometry : MultiMarkupConverter
+    public class GraphIntervalToGeometryConverter : MultiMarkupConverter
     {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -38,7 +38,7 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
             if (firstPoint == null && lastPoint == null) return null;
 
             double intervalHeight;
-            double intervalWidth = CalculateIntervalLength(firstPoint, lastPoint, minValue, maxValue) * columnWidth;
+            double intervalWidth = interval.GetIntervalLength(minValue, maxValue) * columnWidth;
 
             if (interval.Height != null)
             {
@@ -61,7 +61,7 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
                     intervalHeight = graphHeight * maxIntervalHeight;
                 }
             }
-            
+
 
 
 
@@ -77,7 +77,8 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
                 segmentLength = intervalWidth / 2;
             }
 
-            double startDrawingPoint = (firstPoint - minValue) * columnWidth ?? 0;
+            double firstPointRelativeToMinValue = firstPoint - minValue ?? 0;
+            double startDrawingPoint = firstPointRelativeToMinValue * columnWidth;
             double endDrawingPoint = startDrawingPoint + intervalWidth;
             double intervalHeightY = graphHeight - intervalHeight;
 
@@ -114,26 +115,6 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
             PathGeometry geometry = new PathGeometry(new List<PathFigure>() { figure });
 
             return geometry;
-        }
-
-        private double CalculateIntervalLength(double? firstPoint, double? lastPoint, double minValue, double maxValue)
-        {
-            double intervalLength;
-
-            if (firstPoint == null)
-            {
-                intervalLength = (double)lastPoint! - minValue;
-            }
-            else if (lastPoint == null)
-            {
-                intervalLength = maxValue - (double)firstPoint;
-            }
-            else
-            {
-                intervalLength = (double)lastPoint - (double)firstPoint;
-            }
-
-            return intervalLength;
         }
 
         private ArcSegment CreateArcSegment(double width, double height, Point endPoint)

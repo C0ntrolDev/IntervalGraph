@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IntervalGraph.Models.Enums;
 
 namespace IntervalGraph.Components
 {
@@ -129,7 +130,22 @@ namespace IntervalGraph.Components
             nameof(GraphIntervals),
             typeof(ObservableCollection<GraphInterval>),
             typeof(IntervalGraph),
-            new PropertyMetadata(null, OnGraphIntervalsChanged));
+            new PropertyMetadata(null, OnGraphIntervalsChanged, OnCoerceGraphIntervals));
+
+        private static object OnCoerceGraphIntervals(DependencyObject dependencyObject, object basevalue)
+        {
+            if (dependencyObject is IntervalGraph intervalGraph &&
+                basevalue is ObservableCollection<GraphInterval> graphIntervals)
+            {
+                if (intervalGraph.GraphIntervalsPositioning == GraphIntervalsPositioning.LengthBased)
+                { 
+                    return new ObservableCollection<GraphInterval>(
+                        graphIntervals.OrderByDescending(gi => gi.GetIntervalLength(intervalGraph.DrawedMinValue, intervalGraph.DrawedMaxValue)));
+                }
+            }
+
+            return basevalue;
+        }
 
         private static void OnGraphIntervalsChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
         {
@@ -366,6 +382,22 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region GraphIntervalsPositioningProperty
+
+        public static readonly DependencyProperty GraphIntervalsPositioningProperty = DependencyProperty.Register(
+            nameof(GraphIntervalsPositioning),
+            typeof(GraphIntervalsPositioning),
+            typeof(IntervalGraph),
+            new PropertyMetadata(GraphIntervalsPositioning.NoBased));
+
+        public GraphIntervalsPositioning GraphIntervalsPositioning
+        {
+            get => (GraphIntervalsPositioning)GetValue(GraphIntervalsPositioningProperty);
+            set => SetValue(GraphIntervalsPositioningProperty, value);
+        }
+
+        #endregion
+
         #endregion
 
         #endregion
@@ -524,15 +556,41 @@ namespace IntervalGraph.Components
         {
             if (GraphIntervals != null && GraphIntervals.Count != 0)
             {
-                List<int> AllPoints = GraphIntervals
-                    .Select(gi => new double?[] { gi?.FirstPoint?.X, gi?.LastPoint?.X })
-                    .SelectMany(ip => ip)
-                    .Where(p => p != null)
-                    .Select(p => (int)p)
-                    .ToList();
+                var minInterval = GraphIntervals.Where(gi => gi.FirstPoint != null || gi.LastPoint != null).MinBy(gi =>
+                {
+                    if (gi.FirstPoint == null) return gi.LastPoint.X;
+                    return gi.FirstPoint.X;
+                });
 
-                int newMinValue = AllPoints.Min();
-                int newMaxValue = AllPoints.Max();
+                var maxInterval = GraphIntervals.Where(gi => gi.FirstPoint != null || gi.LastPoint != null).MaxBy(gi =>
+                {
+                    if (gi.FirstPoint == null) return gi.LastPoint.X;
+                    return gi.FirstPoint.X;
+                });
+
+
+                int newMinValue;
+                int newMaxValue;
+
+
+                if (minInterval.FirstPoint == null)
+                {
+                    newMinValue = (int)Math.Floor(minInterval.LastPoint.X) - 5;
+                }
+                else
+                {
+                    newMinValue = (int)Math.Floor(minInterval.FirstPoint.X);
+                }
+
+                if (maxInterval.LastPoint == null)
+                {
+                    newMaxValue = (int)Math.Floor(minInterval.FirstPoint.X) + 5;
+                }
+                else
+                {
+                    newMaxValue = (int)Math.Floor(minInterval.LastPoint.X);
+                }
+
 
                 if (MinValue == null || MinValue > newMinValue)
                 {

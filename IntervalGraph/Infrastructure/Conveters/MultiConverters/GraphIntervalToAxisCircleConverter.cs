@@ -8,16 +8,19 @@ using IntervalGraph.Models.Graph;
 
 namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 {
-    public class GraphIntervalToAxisCircle : MultiMarkupConverter 
+    public class GraphIntervalToAxisCircleConverter : MultiMarkupConverter 
     {
         public override object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            GraphInterval interval = values[0] as GraphInterval;
-            double columnWidth = System.Convert.ToDouble(values[1]);
-            double circleRadius = System.Convert.ToDouble(values[2]);
+            if (values.Length != 4) throw new InvalidOperationException("Values is not set correctly. Template: GraphInterval, ColumnWidth, MinValue, CircleRadius");
 
-            PathFigure firstCircle = CreateCircle(interval.FirstPoint, columnWidth, circleRadius);
-            PathFigure lastCircle = CreateCircle(interval.LastPoint, columnWidth, circleRadius);
+            GraphInterval interval = (GraphInterval)values[0];
+            double columnWidth = System.Convert.ToDouble(values[1]);
+            double minValue = System.Convert.ToDouble(values[2]);
+            double circleRadius = System.Convert.ToDouble(values[3]);
+
+            PathFigure? firstCircle = CreateCircle(interval.FirstPoint, columnWidth, minValue, circleRadius);
+            PathFigure? lastCircle = CreateCircle(interval.LastPoint, columnWidth, minValue, circleRadius);
 
 
             PathGeometry geometry = new PathGeometry();
@@ -34,22 +37,15 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 
             return geometry;
         }
-       
-
-        private LineSegment CreateInvisibleLineSegment(Point endPoint)
-        {
-            return new LineSegment()
-            {
-                Point = endPoint,
-                IsStroked = false
-            };
-        }
-
-        private PathFigure? CreateCircle(IntervalPoint intervalPoint, double columnWidth, double circleRadius)
+        
+        private PathFigure? CreateCircle(IntervalPoint? intervalPoint, double columnWidth, double minValue, double circleRadius)
         {
             if (intervalPoint != null)
             {
                 List<PathSegment> circleSegments = new List<PathSegment>();
+
+                double pointRelativeToMinValue = intervalPoint.X - minValue;
+                double startPoint = pointRelativeToMinValue * columnWidth;
 
                 circleSegments.Add(new ArcSegment()
                 {
@@ -57,11 +53,11 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
                     RotationAngle = 0,
                     SweepDirection = SweepDirection.Counterclockwise,
                     IsLargeArc = true,
-                    Point = new Point(intervalPoint.X * columnWidth + 0.1, 0),
+                    Point = new Point(startPoint + 0.1, 0),
                     IsStroked = true
                 });
 
-                PathFigure circle = new PathFigure(new Point(intervalPoint.X * columnWidth, 0), circleSegments, true);
+                PathFigure circle = new PathFigure(new Point(startPoint, 0), circleSegments, true);
                 circle.IsFilled = intervalPoint.IsInclusive;
 
                 return circle;

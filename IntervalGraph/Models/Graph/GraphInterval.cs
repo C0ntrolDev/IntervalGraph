@@ -1,4 +1,4 @@
-﻿using System;
+﻿   using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 
@@ -19,6 +19,7 @@ namespace IntervalGraph.Models.Graph
         public object Icon { get; set; }
         public string LegendName { get; set; } = "";
 
+
         public GraphInterval() { }
 
         public GraphInterval(double x1, double x2, string legendName) : base(x1, x2)
@@ -37,6 +38,29 @@ namespace IntervalGraph.Models.Graph
             LegendName = legendName;
         }
 
+
+        public double GetIntervalLength(double minValue, double maxValue)
+        {
+            double? firstPoint = FirstPoint?.X;
+            double? lastPoint = LastPoint?.X;
+
+            double intervalLength;
+
+            if (firstPoint == null)
+            {
+                intervalLength = (double)lastPoint! - minValue;
+            }
+            else if (lastPoint == null)
+            {
+                intervalLength = maxValue - (double)firstPoint;
+            }
+            else
+            {
+                intervalLength = (double)lastPoint - (double)firstPoint;
+            }
+
+            return intervalLength;
+        }
 
         public new object Clone()
         {
