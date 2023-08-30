@@ -22,11 +22,14 @@
                       VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible"
                       DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
                       BorderThickness="0"
-                      Style="{Binding ScrollViewerStyle, TargetNullValue={StaticResource DefaultScrollViewerStyle}}">
+                      Style="{Binding ScrollViewerStyle, TargetNullValue={StaticResource DefaultScrollViewerStyle}}"
+                      PreviewMouseWheel="OnMouseWheel">
 
             <i:Interaction.Behaviors>
                 <b:BindableActualSizeBehavior ActualWidth="{Binding GraphWidth, Mode=OneWayToSource}"/>
             </i:Interaction.Behaviors>
+
+            
 
             <Grid Width="{Binding ZoomedGraphWidth}" Background="Transparent">
 

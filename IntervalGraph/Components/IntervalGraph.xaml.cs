@@ -93,6 +93,48 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region GraphIntervalsProperty
+
+        public static readonly DependencyProperty GraphIntervalsProperty = DependencyProperty.Register(
+            nameof(GraphIntervals),
+            typeof(ObservableCollection<GraphInterval>),
+            typeof(IntervalGraph),
+            new PropertyMetadata(null, OnGraphIntervalsChanged, OnCoerceGraphIntervals));
+
+        private static object OnCoerceGraphIntervals(DependencyObject dependencyObject, object basevalue)
+        {
+            if (dependencyObject is IntervalGraph intervalGraph &&
+                basevalue is ObservableCollection<GraphInterval> graphIntervals)
+            {
+                if (intervalGraph.GraphIntervalsPositioning == GraphIntervalsPositioning.LengthBased)
+                {
+                    return new ObservableCollection<GraphInterval>(
+                        graphIntervals.OrderByDescending(gi => gi.GetIntervalLength(intervalGraph.DrawedMinValue, intervalGraph.DrawedMaxValue)));
+                }
+            }
+
+            return basevalue;
+        }
+
+        private static void OnGraphIntervalsChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (dependencyObject is IntervalGraph intervalGraph &&
+                e.NewValue is ObservableCollection<GraphInterval> graphIntervals)
+            {
+                graphIntervals.CollectionChanged += (s, e) => intervalGraph.AdaptGraphToNewValues();
+                intervalGraph.AdaptGraphToNewValues();
+            }
+        }
+
+        public ObservableCollection<GraphInterval> GraphIntervals
+        {
+            get => (ObservableCollection<GraphInterval>)GetValue(GraphIntervalsProperty);
+            set => SetValue(GraphIntervalsProperty, value);
+        }
+
+        #endregion
+
+
         #region MaxZoomProperty
 
         public static readonly DependencyProperty MaxZoomProperty = DependencyProperty.Register(
@@ -120,47 +162,6 @@ namespace IntervalGraph.Components
         {
             get => (double?)GetValue(MaxZoomProperty);
             set => SetValue(MaxZoomProperty, value);
-        }
-
-        #endregion
-
-        #region GraphIntervalsProperty
-
-        public static readonly DependencyProperty GraphIntervalsProperty = DependencyProperty.Register(
-            nameof(GraphIntervals),
-            typeof(ObservableCollection<GraphInterval>),
-            typeof(IntervalGraph),
-            new PropertyMetadata(null, OnGraphIntervalsChanged, OnCoerceGraphIntervals));
-
-        private static object OnCoerceGraphIntervals(DependencyObject dependencyObject, object basevalue)
-        {
-            if (dependencyObject is IntervalGraph intervalGraph &&
-                basevalue is ObservableCollection<GraphInterval> graphIntervals)
-            {
-                if (intervalGraph.GraphIntervalsPositioning == GraphIntervalsPositioning.LengthBased)
-                { 
-                    return new ObservableCollection<GraphInterval>(
-                        graphIntervals.OrderByDescending(gi => gi.GetIntervalLength(intervalGraph.DrawedMinValue, intervalGraph.DrawedMaxValue)));
-                }
-            }
-
-            return basevalue;
-        }
-
-        private static void OnGraphIntervalsChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
-        {
-            if (dependencyObject is IntervalGraph intervalGraph && 
-                e.NewValue is ObservableCollection<GraphInterval> graphIntervals)
-            {
-                graphIntervals.CollectionChanged += (s, e) => intervalGraph.AdaptGraphToNewValues();
-                intervalGraph.AdaptGraphToNewValues();
-            }
-        }
-
-        public ObservableCollection<GraphInterval> GraphIntervals
-        {
-            get => (ObservableCollection<GraphInterval>)GetValue(GraphIntervalsProperty);
-            set => SetValue(GraphIntervalsProperty, value);
         }
 
         #endregion
@@ -202,6 +203,38 @@ namespace IntervalGraph.Components
         {
             get => (double)GetValue(ZoomProperty);
             set => SetValue(ZoomProperty, value);
+        }
+
+        #endregion
+
+        #region IsZoomChangeEnabledWithWheelProperty
+
+        public static readonly DependencyProperty IsZoomChangeEnabledWithWheelProperty = DependencyProperty.Register(
+            nameof(IsZoomChangeEnabledWithWheel),
+            typeof(bool),
+            typeof(IntervalGraph),
+            new PropertyMetadata(true));
+
+        public bool IsZoomChangeEnabledWithWheel
+        {
+            get => (bool)GetValue(IsZoomChangeEnabledWithWheelProperty);
+            set => SetValue(IsZoomChangeEnabledWithWheelProperty, value);
+        }
+
+        #endregion
+
+        #region WheelZoomingStepProperty
+
+        public static readonly DependencyProperty WheelZoomingStepProperty = DependencyProperty.Register(
+            nameof(WheelZoomingStep),
+            typeof(double),
+            typeof(IntervalGraph),
+            new PropertyMetadata(0.2));
+
+        public double WheelZoomingStep
+        {
+            get => (double)GetValue(WheelZoomingStepProperty);
+            set => SetValue(WheelZoomingStepProperty, value);
         }
 
         #endregion
@@ -660,6 +693,15 @@ namespace IntervalGraph.Components
             field = value;
             OnPropertyChanged(propertyName);
             return true;
+        }
+
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            
+            if (IsZoomChangeEnabledWithWheel)
+            {
+                Zoom += WheelZoomingStep * Math.Sign(e.Delta);
+            }
         }
     }
 
