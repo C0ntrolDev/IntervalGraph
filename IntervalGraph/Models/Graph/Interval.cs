@@ -34,8 +34,8 @@ namespace IntervalGraph.Models.Graph
             return new Interval()
             {
                 Id = Id,
-                FirstPoint = (IntervalPoint)FirstPoint.Clone(),
-                LastPoint = (IntervalPoint)LastPoint.Clone(),
+                FirstPoint = FirstPoint?.Clone() as IntervalPoint,
+                LastPoint = LastPoint?.Clone() as IntervalPoint,
                 IsPositive = IsPositive
             };
         }

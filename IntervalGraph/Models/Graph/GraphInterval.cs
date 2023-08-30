@@ -29,8 +29,8 @@ namespace IntervalGraph.Models.Graph
 
         public GraphInterval(Interval interval)
         {
-            FirstPoint = (IntervalPoint)interval.FirstPoint.Clone();
-            LastPoint = (IntervalPoint)interval.LastPoint.Clone();
+            FirstPoint = interval.FirstPoint?.Clone() as IntervalPoint;
+            LastPoint = interval.LastPoint?.Clone() as IntervalPoint;
             IsPositive = interval.IsPositive;
         }
         public GraphInterval(Interval interval, string legendName) : this(interval)
@@ -48,7 +48,14 @@ namespace IntervalGraph.Models.Graph
 
             if (firstPoint == null)
             {
-                intervalLength = (double)lastPoint! - minValue;
+                if (lastPoint == null)
+                {
+                    intervalLength = maxValue - minValue;
+                }
+                else
+                {
+                    intervalLength = (double)lastPoint - minValue;
+                }
             }
             else if (lastPoint == null)
             {
