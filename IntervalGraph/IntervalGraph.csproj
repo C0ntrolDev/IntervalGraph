@@ -5,6 +5,16 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <Title>IntervalGraph_WPF</Title>
+    <Version>1.1.0</Version>
+    <Authors>ControlDev</Authors>
+    <Product>IntervalGraph_WPF</Product>
+    <Description>Extension for WPF, thanks to which you can create an interval graph. An interval graph is a graph used for the interval method in mathematics.</Description>
+    <PackageTags>WPF;Graph</PackageTags>
+    <PackageProjectUrl>https://github.com/C0ntrolDev/IntervalGraph</PackageProjectUrl>
+    <PackageIcon>DeathTimeProject_5lQvN1DD1G.png</PackageIcon>
+    <Copyright>MIT</Copyright>
+    <RepositoryUrl>https://github.com/C0ntrolDev/IntervalGraph</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>

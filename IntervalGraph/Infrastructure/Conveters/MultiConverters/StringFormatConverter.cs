@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using IntervalGraph.Infrastructure.Conveters.Base;
+using IntervalGraph.Models.Graph;
 
 namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 {
@@ -19,7 +20,6 @@ namespace IntervalGraph.Infrastructure.Conveters.MultiConverters
 
             return null;
         }
-
         public override object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) =>
             throw new InvalidOperationException("This converter is not intended for reverse conversions");
     }

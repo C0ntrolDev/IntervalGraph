@@ -1,21 +1,79 @@
-﻿using System.Collections.Generic;
+﻿   using System;
+using System.Collections.Generic;
 using System.Windows.Media;
 
 namespace IntervalGraph.Models.Graph
 {
-    public class GraphInterval<T>
+    public class GraphInterval : Interval
     {
-        public Interval<T> Interval { get; set; }
-
         public List<double> StrokeDashArray { get; set; } = new List<double>() { 1 };
         public double StrokeThickness { get; set; } = 1;
         public Brush StrokeBrush { get; set; } = Brushes.Black;
         public Brush FillBrush { get; set; } = Brushes.Black;
 
+        /// <summary>
+        /// Calculated relative to the height of the graph (from 0 to 1)
+        /// </summary>
+        public double? Height { get; set; }
+
         public object Icon { get; set; }
         public string LegendName { get; set; } = "";
-        public bool IsEnabled { get; set; } = true;
-    }
 
-    public class GraphInterval : GraphInterval<int> { }
+
+        public GraphInterval() { }
+
+        public GraphInterval(double x1, double x2, string legendName) : base(x1, x2)
+        {
+            LegendName = legendName;
+        }
+
+        public GraphInterval(Interval interval)
+        {
+            FirstPoint = (IntervalPoint)interval.FirstPoint.Clone();
+            LastPoint = (IntervalPoint)interval.LastPoint.Clone();
+            IsPositive = interval.IsPositive;
+        }
+        public GraphInterval(Interval interval, string legendName) : this(interval)
+        {
+            LegendName = legendName;
+        }
+
+
+        public double GetIntervalLength(double minValue, double maxValue)
+        {
+            double? firstPoint = FirstPoint?.X;
+            double? lastPoint = LastPoint?.X;
+
+            double intervalLength;
+
+            if (firstPoint == null)
+            {
+                intervalLength = (double)lastPoint! - minValue;
+            }
+            else if (lastPoint == null)
+            {
+                intervalLength = maxValue - (double)firstPoint;
+            }
+            else
+            {
+                intervalLength = (double)lastPoint - (double)firstPoint;
+            }
+
+            return intervalLength;
+        }
+
+        public new object Clone()
+        {
+            return new GraphInterval((Interval)base.Clone())
+            {
+                StrokeDashArray = StrokeDashArray,
+                StrokeThickness = StrokeThickness,
+                StrokeBrush = StrokeBrush,
+                FillBrush = FillBrush,
+                Height = Height,
+                Icon = Icon,
+                LegendName = LegendName,
+            };
+        }
+    }
 }

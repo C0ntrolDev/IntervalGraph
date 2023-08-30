@@ -1,8 +1,28 @@
-﻿namespace IntervalGraph.Models.Graph
+﻿using System;
+
+namespace IntervalGraph.Models.Graph
 {
-    public class IntervalPoint<T>
+    public class IntervalPoint : ICloneable
     {
-        public T X { get; set; }
-        public bool IsInclusive { get; set; }
+        public int Id { get; set; }
+
+        public double X { get; set; }
+        public bool IsInclusive { get; set; } = true;
+
+        public IntervalPoint() { }
+        public IntervalPoint(double x)
+        {
+            X = x;
+        }
+
+        public object Clone()
+        {
+            return new IntervalPoint()
+            {
+                Id = Id,
+                IsInclusive = IsInclusive,
+                X = X
+            };
+        }
     }
 }

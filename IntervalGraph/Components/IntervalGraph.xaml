@@ -10,19 +10,26 @@
              xmlns:c="clr-namespace:IntervalGraph.Infrastructure.Conveters.Converters"
              xmlns:graph="clr-namespace:IntervalGraph.Models.Graph"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             Background="White">
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style x:Key="DefaultScrollViewerStyle" TargetType="ScrollViewer"/>
+    </UserControl.Resources>
 
     <Grid DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}">
 
         <ScrollViewer HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Visible"
                       DataContext="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}}"
-                      BorderThickness="0">
+                      BorderThickness="0"
+                      Style="{Binding ScrollViewerStyle, TargetNullValue={StaticResource DefaultScrollViewerStyle}}"
+                      PreviewMouseWheel="OnMouseWheel">
 
             <i:Interaction.Behaviors>
                 <b:BindableActualSizeBehavior ActualWidth="{Binding GraphWidth, Mode=OneWayToSource}"/>
             </i:Interaction.Behaviors>
+
+            
 
             <Grid Width="{Binding ZoomedGraphWidth}" Background="Transparent">
 
@@ -111,7 +118,7 @@
                             <DataTemplate>
                                 <Path Stroke="{Binding StrokeBrush}" StrokeThickness="{Binding StrokeThickness}" StrokeDashArray="{Binding StrokeDashArray}" Fill="{Binding FillBrush}">
                                     <Path.Data>
-                                        <MultiBinding Converter="{cm:GraphIntervalToGeometry}">
+                                        <MultiBinding Converter="{cm:GraphIntervalToGeometryConverter}">
                                             <Binding/>
                                             <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
                                                      Path="ColumnWidth"/>
@@ -169,10 +176,12 @@
                                       VerticalAlignment="Center">
 
                                     <Path.Data>
-                                        <MultiBinding Converter="{cm:GraphIntervalToAxisCircle}">
+                                        <MultiBinding Converter="{cm:GraphIntervalToAxisCircleConverter}">
                                             <Binding/>
                                             <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
                                                      Path="ColumnWidth"/>
+                                            <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
+                                                     Path="DrawedMinValue"/>
                                             <Binding RelativeSource="{RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}" 
                                                      Path="IntAxis.CirclesRadius"/>
                                         </MultiBinding>
@@ -205,6 +214,7 @@
                                     <Canvas>
 
                                         <TextBlock FontSize="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.DrawedFontSize}"
+                                                   FontFamily="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.FontFamily}"
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.TextColorBrush}">
 
                                             <TextBlock.Text>

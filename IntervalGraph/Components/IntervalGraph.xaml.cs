@@ -18,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IntervalGraph.Models.Enums;
 
 namespace IntervalGraph.Components
 {
@@ -92,6 +93,48 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region GraphIntervalsProperty
+
+        public static readonly DependencyProperty GraphIntervalsProperty = DependencyProperty.Register(
+            nameof(GraphIntervals),
+            typeof(ObservableCollection<GraphInterval>),
+            typeof(IntervalGraph),
+            new PropertyMetadata(null, OnGraphIntervalsChanged, OnCoerceGraphIntervals));
+
+        private static object OnCoerceGraphIntervals(DependencyObject dependencyObject, object basevalue)
+        {
+            if (dependencyObject is IntervalGraph intervalGraph &&
+                basevalue is ObservableCollection<GraphInterval> graphIntervals)
+            {
+                if (intervalGraph.GraphIntervalsPositioning == GraphIntervalsPositioning.LengthBased)
+                {
+                    return new ObservableCollection<GraphInterval>(
+                        graphIntervals.OrderByDescending(gi => gi.GetIntervalLength(intervalGraph.DrawedMinValue, intervalGraph.DrawedMaxValue)));
+                }
+            }
+
+            return basevalue;
+        }
+
+        private static void OnGraphIntervalsChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
+        {
+            if (dependencyObject is IntervalGraph intervalGraph &&
+                e.NewValue is ObservableCollection<GraphInterval> graphIntervals)
+            {
+                graphIntervals.CollectionChanged += (s, e) => intervalGraph.AdaptGraphToNewValues();
+                intervalGraph.AdaptGraphToNewValues();
+            }
+        }
+
+        public ObservableCollection<GraphInterval> GraphIntervals
+        {
+            get => (ObservableCollection<GraphInterval>)GetValue(GraphIntervalsProperty);
+            set => SetValue(GraphIntervalsProperty, value);
+        }
+
+        #endregion
+
+
         #region MaxZoomProperty
 
         public static readonly DependencyProperty MaxZoomProperty = DependencyProperty.Register(
@@ -119,32 +162,6 @@ namespace IntervalGraph.Components
         {
             get => (double?)GetValue(MaxZoomProperty);
             set => SetValue(MaxZoomProperty, value);
-        }
-
-        #endregion
-
-        #region GraphIntervalsProperty
-
-        public static readonly DependencyProperty GraphIntervalsProperty = DependencyProperty.Register(
-            nameof(GraphIntervals),
-            typeof(ObservableCollection<GraphInterval>),
-            typeof(IntervalGraph),
-            new PropertyMetadata(null, OnGraphIntervalsChanged));
-
-        private static void OnGraphIntervalsChanged(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs e)
-        {
-            if (dependencyObject is IntervalGraph intervalGraph && 
-                e.NewValue is ObservableCollection<GraphInterval> graphIntervals)
-            {
-                graphIntervals.CollectionChanged += (s, e) => intervalGraph.AdaptGraphToNewValues();
-                intervalGraph.AdaptGraphToNewValues();
-            }
-        }
-
-        public ObservableCollection<GraphInterval> GraphIntervals
-        {
-            get => (ObservableCollection<GraphInterval>)GetValue(GraphIntervalsProperty);
-            set => SetValue(GraphIntervalsProperty, value);
         }
 
         #endregion
@@ -190,9 +207,57 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region IsZoomChangeEnabledWithWheelProperty
+
+        public static readonly DependencyProperty IsZoomChangeEnabledWithWheelProperty = DependencyProperty.Register(
+            nameof(IsZoomChangeEnabledWithWheel),
+            typeof(bool),
+            typeof(IntervalGraph),
+            new PropertyMetadata(true));
+
+        public bool IsZoomChangeEnabledWithWheel
+        {
+            get => (bool)GetValue(IsZoomChangeEnabledWithWheelProperty);
+            set => SetValue(IsZoomChangeEnabledWithWheelProperty, value);
+        }
+
+        #endregion
+
+        #region WheelZoomingStepProperty
+
+        public static readonly DependencyProperty WheelZoomingStepProperty = DependencyProperty.Register(
+            nameof(WheelZoomingStep),
+            typeof(double),
+            typeof(IntervalGraph),
+            new PropertyMetadata(0.2));
+
+        public double WheelZoomingStep
+        {
+            get => (double)GetValue(WheelZoomingStepProperty);
+            set => SetValue(WheelZoomingStepProperty, value);
+        }
+
+        #endregion
+
         #endregion
 
         #region DesignProperties
+
+        #region ScrollViewerStyleProperty
+
+        public static readonly DependencyProperty ScrollViewerStyleProperty = DependencyProperty.Register(
+            nameof(ScrollViewerStyle),
+            typeof(Style),
+            typeof(IntervalGraph),
+            new PropertyMetadata(null));
+
+        public Style ScrollViewerStyle
+        {
+            get => (Style)GetValue(ScrollViewerStyleProperty);
+            set => SetValue(ScrollViewerStyleProperty, value);
+        }
+
+        #endregion
 
         #region MajorColorBrushProperty
 
@@ -350,6 +415,22 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region GraphIntervalsPositioningProperty
+
+        public static readonly DependencyProperty GraphIntervalsPositioningProperty = DependencyProperty.Register(
+            nameof(GraphIntervalsPositioning),
+            typeof(GraphIntervalsPositioning),
+            typeof(IntervalGraph),
+            new PropertyMetadata(GraphIntervalsPositioning.NoBased));
+
+        public GraphIntervalsPositioning GraphIntervalsPositioning
+        {
+            get => (GraphIntervalsPositioning)GetValue(GraphIntervalsPositioningProperty);
+            set => SetValue(GraphIntervalsPositioningProperty, value);
+        }
+
+        #endregion
+
         #endregion
 
         #endregion
@@ -360,6 +441,7 @@ namespace IntervalGraph.Components
 
         private int _drawedMinValue;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int DrawedMinValue
         {
             get => _drawedMinValue;
@@ -380,6 +462,7 @@ namespace IntervalGraph.Components
 
         private int _drawedMaxValue;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int DrawedMaxValue
         {
             get => _drawedMaxValue;
@@ -395,13 +478,17 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public int ColumnCount => DrawedMaxValue - DrawedMinValue + 1;
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public IEnumerable<int?> AxisValues => Enumerable.Range(DrawedMinValue, ColumnCount).Select(i => (int?)i);
 
         #region ColumnWidth
 
         private double _columnWidth;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double ColumnWidth
         {
             get => _columnWidth;
@@ -415,6 +502,7 @@ namespace IntervalGraph.Components
         private double _startGraphWidth;
         private double _graphWidth;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double GraphWidth
         {
             get => _graphWidth;
@@ -437,6 +525,7 @@ namespace IntervalGraph.Components
 
         private double _zoomedGraphWidth;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double ZoomedGraphWidth
         {
             get => _zoomedGraphWidth;
@@ -453,6 +542,7 @@ namespace IntervalGraph.Components
 
         private double _axisHeight;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double AxisHeight
         {
             get => _axisHeight;
@@ -469,6 +559,7 @@ namespace IntervalGraph.Components
 
         private double _upperGraphHeight;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double UpperGraphHeight
         {
             get => _upperGraphHeight;
@@ -481,6 +572,7 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double GraphHeight => AxisHeight + UpperGraphHeight;
 
         #endregion
@@ -497,15 +589,41 @@ namespace IntervalGraph.Components
         {
             if (GraphIntervals != null && GraphIntervals.Count != 0)
             {
-                List<int> AllPoints = GraphIntervals
-                    .Select(gi => new int?[] { gi.Interval?.FirstPoint?.X, gi.Interval?.LastPoint?.X })
-                    .SelectMany(ip => ip)
-                    .Where(p => p != null)
-                    .Select(p => (int)p)
-                    .ToList();
+                var minInterval = GraphIntervals.Where(gi => gi.FirstPoint != null || gi.LastPoint != null).MinBy(gi =>
+                {
+                    if (gi.FirstPoint == null) return gi.LastPoint.X;
+                    return gi.FirstPoint.X;
+                });
 
-                int newMinValue = AllPoints.Min();
-                int newMaxValue = AllPoints.Max();
+                var maxInterval = GraphIntervals.Where(gi => gi.FirstPoint != null || gi.LastPoint != null).MaxBy(gi =>
+                {
+                    if (gi.LastPoint == null) return gi.FirstPoint.X;
+                    return gi.LastPoint.X;
+                });
+
+
+                int newMinValue;
+                int newMaxValue;
+
+
+                if (minInterval.FirstPoint == null)
+                {
+                    newMinValue = (int)Math.Floor(minInterval.LastPoint.X) - 5;
+                }
+                else
+                {
+                    newMinValue = (int)Math.Floor(minInterval.FirstPoint.X);
+                }
+
+                if (maxInterval.LastPoint == null)
+                {
+                    newMaxValue = (int)Math.Floor(maxInterval.FirstPoint.X) + 5;
+                }
+                else
+                {
+                    newMaxValue = (int)Math.Floor(maxInterval.LastPoint.X);
+                }
+
 
                 if (MinValue == null || MinValue > newMinValue)
                 {
@@ -575,6 +693,15 @@ namespace IntervalGraph.Components
             field = value;
             OnPropertyChanged(propertyName);
             return true;
+        }
+
+        private void OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            
+            if (IsZoomChangeEnabledWithWheel)
+            {
+                Zoom += WheelZoomingStep * Math.Sign(e.Delta);
+            }
         }
     }
 

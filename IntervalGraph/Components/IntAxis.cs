@@ -118,6 +118,22 @@ namespace IntervalGraph.Components
 
         #endregion
 
+        #region FontFamilyProperty
+
+        public static readonly DependencyProperty FontFamilyProperty = DependencyProperty.Register(
+            nameof(FontFamily),
+            typeof(FontFamily),
+            typeof(IntAxis),
+            new PropertyMetadata(default(FontFamily)));
+
+        public FontFamily FontFamily
+        {
+            get => (FontFamily)GetValue(FontFamilyProperty);
+            set => SetValue(FontFamilyProperty, value);
+        }
+
+        #endregion
+
         #region TextFormatProperty
 
         public static readonly DependencyProperty TextFormatProperty = DependencyProperty.Register(
@@ -140,7 +156,7 @@ namespace IntervalGraph.Components
             nameof(FontSize),
             typeof(double?),
             typeof(IntAxis),
-            new PropertyMetadata(null));
+            new PropertyMetadata(null, UpdateTextFontSize));
 
         public double? FontSize
         {
@@ -225,8 +241,6 @@ namespace IntervalGraph.Components
 
         #endregion
 
-
-
         #endregion
 
 
@@ -234,6 +248,7 @@ namespace IntervalGraph.Components
 
         private double _drawedFontSize;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public double DrawedFontSize
         {
             get => _drawedFontSize;
@@ -244,6 +259,7 @@ namespace IntervalGraph.Components
 
         #region TextContainerHeight
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public GridLength TextContainerHeight
         {
             get
