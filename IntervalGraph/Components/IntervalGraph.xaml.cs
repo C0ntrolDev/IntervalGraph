@@ -597,8 +597,8 @@ namespace IntervalGraph.Components
 
                 var maxInterval = GraphIntervals.Where(gi => gi.FirstPoint != null || gi.LastPoint != null).MaxBy(gi =>
                 {
-                    if (gi.FirstPoint == null) return gi.LastPoint.X;
-                    return gi.FirstPoint.X;
+                    if (gi.LastPoint == null) return gi.FirstPoint.X;
+                    return gi.LastPoint.X;
                 });
 
 
@@ -617,11 +617,11 @@ namespace IntervalGraph.Components
 
                 if (maxInterval.LastPoint == null)
                 {
-                    newMaxValue = (int)Math.Floor(minInterval.FirstPoint.X) + 5;
+                    newMaxValue = (int)Math.Floor(maxInterval.FirstPoint.X) + 5;
                 }
                 else
                 {
-                    newMaxValue = (int)Math.Floor(minInterval.LastPoint.X);
+                    newMaxValue = (int)Math.Floor(maxInterval.LastPoint.X);
                 }
 
 
