@@ -700,7 +700,10 @@ namespace IntervalGraph.Components
             
             if (IsZoomChangeEnabledWithWheel)
             {
-                Zoom += WheelZoomingStep * Math.Sign(e.Delta);
+                if (Zoom + WheelZoomingStep * Math.Sign(e.Delta) >= 1)
+                {
+                    Zoom += WheelZoomingStep * Math.Sign(e.Delta);
+                }
             }
         }
     }
