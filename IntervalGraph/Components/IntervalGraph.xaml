@@ -172,7 +172,7 @@
                             <DataTemplate>
                                 <Path Stroke="{Binding StrokeBrush}" 
                                       StrokeThickness="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.CirclesThickness}"
-                                      Fill="{Binding FillBrush}"
+                                      Fill="{Binding StrokeBrush}"
                                       VerticalAlignment="Center">
 
                                     <Path.Data>

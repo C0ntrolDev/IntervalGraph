@@ -7,7 +7,7 @@ namespace IntervalGraph.Models.Graph
         public int Id { get; set; }
 
         public double X { get; set; }
-        public bool IsInclusive { get; set; } = true;
+        public bool IsInclusive { get; set; }
 
         public IntervalPoint() { }
         public IntervalPoint(double x)

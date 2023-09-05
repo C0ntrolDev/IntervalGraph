@@ -194,6 +194,10 @@ namespace IntervalGraph.Components
                         return intervalGraph.MaxZoom;
                     }
                 }
+                if ((double)basevalue < 1.0)
+                {
+                    return 1.0;
+                }
             }
 
             return basevalue;
@@ -697,7 +701,6 @@ namespace IntervalGraph.Components
 
         private void OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            
             if (IsZoomChangeEnabledWithWheel)
             {
                 Zoom += WheelZoomingStep * Math.Sign(e.Delta);
