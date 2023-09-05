@@ -24,7 +24,7 @@ xmlns:gi="clr-namespace:IntervalGraph.Components;assembly=IntervalGraph"
 Для начала мы создаем наш элемент управления:
 
 ```XAML
-<c:IntervalGraph Height="200" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top"
+<gi:IntervalGraph Height="200" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top"
                  MajorStep="2" MajorThickness="1" MinorStep="0"
                  GraphIntervals="{Binding GraphIntervals}" >
 
@@ -32,7 +32,7 @@ xmlns:gi="clr-namespace:IntervalGraph.Components;assembly=IntervalGraph"
         <c:IntAxis FontSize="13" NumStep="2" CirclesRadius="3"/>
     </c:IntervalGraph.IntAxis>
 
-</c:IntervalGraph>
+</gi:IntervalGraph>
 ```
 
 Самое важное свойство здесь - это GraphIntervals.
