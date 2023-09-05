@@ -38,7 +38,7 @@ xmlns:gi="clr-namespace:IntervalGraph.Components;assembly=IntervalGraph"
 Самое важное свойство здесь - это GraphIntervals.
 Именно по содержимому этого свойства будут строится интервалы.
 
-(Подробнее об IntervalGraph, можно узнать [здесь](http://example.com/)).
+(Подробнее об IntervalGraph, можно узнать [здесь](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalGraph.md)).
 
 Для создания нашего интервала нам потребуется раздробить его на две части:
 1) (−∞, 7]
