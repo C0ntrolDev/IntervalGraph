@@ -1,46 +1,48 @@
-# IntevalGraph
+Here's the translation of the "IntervalGraph" page from Russian to English while preserving the Markdown markup:
 
-IntervalGraph - это основной пользовательский элемент управлений, который является главным предметом этой библиотеки. У него есть как и свои свойства, так и подэлемент [IntAxis](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntAxis.md), в котором находится настройки оси и текста под ней.
+# IntervalGraph
 
-Свойства IntervalGraph можно разбить на подгруппы: Min-Max Values, Zoom, Background Lines, Intervals Height.
+IntervalGraph is the main user control element, which is the core of this library. It has its own properties as well as a sub-element [IntAxis](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntAxis.md), which contains axis and text settings.
+
+The properties of IntervalGraph can be categorized into: Min-Max Values, Zoom, Background Lines, and Intervals Height.
 
 ### Min-Max Values
 
-В этой категории содержатся свойства которые влияют на минимальное и максимальное значение графика:
+This category contains properties that affect the minimum and maximum values of the graph:
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| MinValue | double? | null | позволяет указать минимальное значение графика, у значения не самый высокий приоритет, тоесть если в GraphIntervals будет содержаться Interval, у которого IntervalPoint.X < MinValue, то значение учитываться не будет. Если не указать значение, значение будет выбираться автоматически |
-| MaxValue | double? | null | позволяет указать максимальное значение графика, у значения не самый высокий приоритет, тоесть если в GraphIntervals будет содержаться Interval, у которого IntervalPoint.X > MaxValue, то значение учитываться не будет. Если не указать значение, значение будет выбираться автоматически |
-| GraphIntervals | ObservableCollection | null | Отображаемые интервалы, могут влиять на MaxValue и MinValue, если значение будет выходить за их диапазон, если MaxValue или MinValue == null, то график будет учитывать значения IntervalPoint для построения графика |
+| Property | Type | DefaultValue | Description |
+| -------- | ----|--------------|-------------|
+| MinValue | double? | null | Allows you to specify the minimum value of the graph. This value has a lower priority. If an Interval with IntervalPoint.X < MinValue exists in GraphIntervals, it won't be considered. If not specified, the value will be chosen automatically. |
+| MaxValue | double? | null | Allows you to specify the maximum value of the graph. This value has a lower priority. If an Interval with IntervalPoint.X > MaxValue exists in GraphIntervals, it won't be considered. If not specified, the value will be chosen automatically. |
+| GraphIntervals | ObservableCollection | null | Displayed intervals that can affect MaxValue and MinValue. If the value goes beyond their range and MaxValue or MinValue == null, the graph will consider the IntervalPoint values for graph construction. |
 
 ### Zoom
 
-В этой категории содержатся свойства которые влияют на Zoom графика:
+This category contains properties that affect the graph's zoom:
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| MaxZoom | double | 1 | позволяет указать максимальное увеличение графика |
-| Zoom | double? | 1 | позволяет указать Zoom, значение больше MaxZoom, будет проигнорировано |
-| IsZoomChangeEnabledWithWheel | bool | false | будет ли включено Zooming графика с помощью колеса мыши |
-| WheelZoomingStep | bool | false |  на сколько будет изменен Zoom при единичном вращении колеса мыши |
+| Property | Type | DefaultValue | Description |
+| -------- | ----|--------------|-------------|
+| MaxZoom | double | 1 | Allows you to specify the maximum zoom level of the graph. |
+| Zoom | double? | 1 | Allows you to set the zoom level. A value greater than MaxZoom will be ignored. |
+| IsZoomChangeEnabledWithWheel | bool | false | Specifies whether zooming the graph with the mouse wheel is enabled. |
+| WheelZoomingStep | bool | false | Specifies how much the zoom changes with a single rotation of the mouse wheel. |
 
-Стоит упомянуть что Zoom по умолчанию всегда равен 1, и при Zoom = 1 график будет занимать все доступное пространство при запуске вашего приложения
+It's worth mentioning that the default Zoom is always 1, and at Zoom = 1, the graph will occupy the entire available space when your application is launched.
 
 ### Background Lines
 
-В этой категории содержатся свойства которые влияют на линии графика:
+This category contains properties that affect the graph's lines:
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| MajorColorBrush | Brush | Black | позволяет указать цвет первостепенной линии фона |
-| MinorColorBrush | Brush | Black | позволяет указать цвет второстепенной линии фона |
-| MajorThickness | int | 1 | позволяет указать ширину первостепенной линии фона |
-| MinorThickness | int | 1 | позволяет указать ширину второстепенной линии фона |
-| MajorStep | int | 1 | позволяет указать частоту отображения первостепенной линии фона |
-| MinorStep | int | 1 | позволяет указать частоту отображения второстепенной линии фона |
+| Property | Type | DefaultValue | Description |
+| -------- | ----|--------------|-------------|
+| MajorColorBrush | Brush | Black | Allows you to specify the color of the major background line. |
+| MinorColorBrush | Brush | Black | Allows you to specify the color of the minor background line. |
+| MajorThickness | int | 1 | Allows you to specify the thickness of the major background line. |
+| MinorThickness | int | 1 | Allows you to specify the thickness of the minor background line. |
+| MajorStep | int | 1 | Allows you to specify the frequency of displaying the major background line. |
+| MinorStep | int | 1 | Allows you to specify the frequency of displaying the minor background line. |
 
-#### Пример использования данных параметров
+#### Example of using these parameters
 
 ![](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Images/BackgroundLinesExample.png)
 
@@ -58,30 +60,30 @@ IntervalGraph - это основной пользовательский эле�
 
 ### Intervals Height
 
-В этой категории содержатся свойства которые влияют на отображаемую высоту графиков:
+This category contains properties that affect the displayed height of the graphs:
 
-Есть несколько способов указать высоту графиков: 
+There are several ways to specify the height of the graphs:
 
-1. В свойстве GraphInterval.Height указать отображаемую высоту (указывать следует от 0 до 1)
-2. Если IsIntervalHeightDependToWidth == true, то высота будет расчитываться следующим образом: (MaxStableIntervalHeight + (IntervalWidth / GraphWidth * (1 - MaxStableIntervalHeight)) * MaxIntervalHeight). Если говорить более просто, то все интервалы будут иметь максимальную высоту равную MaxIntervalHeight. Далее относительно MaxIntervalHeight расчитывается MaxStableIntervalHeight, а далее к этой высоте прибавляется высота зависящая от ширины интервала.
-3. Если IsIntervalHeightDependToWidth == false, то высота графиков всегда будет равна MaxIntervalHeight.
+1. Set the displayed height in the GraphInterval.Height property (values should be between 0 and 1).
+2. If `IsIntervalHeightDependToWidth` == true, the height will be calculated as follows: (`MaxStableIntervalHeight` + (`IntervalWidth` / `GraphWidth` * (1 - `MaxStableIntervalHeight`)) * `MaxIntervalHeight`). In simpler terms, all intervals will have a maximum height equal to `MaxIntervalHeight`. `MaxStableIntervalHeight` is then calculated relative to `MaxIntervalHeight`, and the height depends on the width of the interval.
+3. If `IsIntervalHeightDependToWidth` == false, the height of the graphs will always be `MaxIntervalHeight`.
 
-Изображение объясняющее работу 2 способа:
+An image explaining the second method:
 
 ![](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Images/IntervalHeightExample.png)
 
-Теперь все свойства:
+Now, all the properties:
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| IsIntervalHeightDependToWidth | bool | false | будет ли высота расчитывать относительно ширины интервала |
-| MaxIntervalHeight | double | 0.7 | максимальная высота графика (задается от 0 до 1) |
-| MaxStableIntervalHeight | double | 0.5 | максимальная обязательная высота графика (задается от 0 до 1) (отображается относительно MaxIntervalHeight) |
+| Property | Type | DefaultValue | Description |
+| -------- | ----|--------------|-------------|
+| IsIntervalHeightDependToWidth | bool | false | Specifies whether the height should be calculated relative to the width of the interval. |
+| MaxIntervalHeight | double | 0.7 | Maximum height of the graph (values should be between 0 and 1). |
+| MaxStableIntervalHeight | double | 0.5 | Maximum mandatory height of the graph (values should be between 0 and 1) (relative to MaxIntervalHeight). |
 
-### Остальные свойства
+### Other Properties
 
-В этой категории содержатся свойства которые не попали ни в одну подборку:
+This category contains properties that do not belong to any of the above categories:
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| GraphIntervalsPositioning | GraphIntervalsPositioning | NoBased | как графики будут отсортированы, сейчас есть один способ сортировки - по длине, тоесть более короткие графики будут находится на переднем плане, а более длинные позади, благодаря этому графики меньше перекрывают друг друга |
+| Property | Type | DefaultValue | Description |
+| -------- | ----|--------------|-------------|
+| GraphIntervalsPositioning | GraphIntervalsPositioning | NoBased | Specifies how the graphs will be sorted. Currently, there is one sorting method - by length. In other words, shorter graphs will be in the foreground, and longer ones will be in the background. This reduces overlap between graphs. |
