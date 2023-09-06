@@ -1,27 +1,25 @@
 # IntervalGraph
 
-InteravalGraph - это библиотека, которая позволяет строить интервальные графики из математики, например благодаря этой библиотеке можно построить подобный график:
+IntervalGraph is a library that allows you to create interval graphs from mathematics. With this library, you can create graphs like the following:
 
 X ∈ (−∞, 7] U (14, 21)
 ![](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Images/Image1.png)
 
-# Установка
+# Installation
 
-Вы можете перейти по ссылке и скачать пакет nuget или скачать с помощью диспечера пакетов в Visual Studio
+You can either follow this [link](https://www.nuget.org/packages/IntervalGraph) to download the NuGet package or use the package manager in Visual Studio.
 
-https://www.nuget.org/packages/IntervalGraph
+For use in XAML code, specify:
 
-Для использование в коде XAML укажите:
-
-```
+```xml
 xmlns:gi="clr-namespace:IntervalGraph.Components;assembly=IntervalGraph"
 ```
 
-# Пример использования
+# Example Usage
 
-Рассмотрим все тот же пример с интевалом: X ∈ (−∞, 7] U (14, 21)
+Let's consider the same example with the interval: X ∈ (−∞, 7] U (14, 21)
 
-Для начала мы создаем наш элемент управления:
+First, create your control element:
 
 ```XAML
 <gi:IntervalGraph Height="200" Width="600" HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -35,16 +33,16 @@ xmlns:gi="clr-namespace:IntervalGraph.Components;assembly=IntervalGraph"
 </gi:IntervalGraph>
 ```
 
-Самое важное свойство здесь - это GraphIntervals.
-Именно по содержимому этого свойства будут строится интервалы.
+The most important property here is `GraphIntervals`. The intervals will be created based on the contents of this property.
 
-(Подробнее об IntervalGraph, можно узнать [здесь](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalGraph.md)).
+(For more information about IntervalGraph, you can learn more [here](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalGraph.md)).
 
-Для создания нашего интервала нам потребуется раздробить его на две части:
+To create our interval, we need to split it into two parts:
 1) (−∞, 7]
 2) (14, 21)
 
-Даллее в вашей ViewModel создаем ObservableCollection<GraphInterval>. И заполняем ее интервалами:
+Next, in your ViewModel, create an `ObservableCollection<GraphInterval>` and populate it with intervals:
+
 ```C#
 List<GraphInterval> intervals = new List<GraphInterval>()
 {
@@ -80,13 +78,12 @@ List<GraphInterval> intervals = new List<GraphInterval>()
 GraphIntervals = new ObservableCollection<GraphInterval>(intervals);
 ```
 
-Для создания интервалов используется класс [GraphInterval](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/GraphInterval.md), у которого есть свойства FirstPoint и LastPoint типа [IntervalPoint](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalPoint.md)
+To create intervals, you will use the [GraphInterval](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/GraphInterval.md) class, which has properties `FirstPoint` and `LastPoint` of type [IntervalPoint](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalPoint.md).
 
-- FirstPoint == null  => (−∞ , ...
-- LastPoint == null  => ... ; +∞)
+- `FirstPoint` == null  => (−∞ , ...
+- `LastPoint` == null  => ... ; +∞)
 
-
-# Ссылки на документацию
+# Documentation Links
 
 - [IntervalGraph](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalGraph.md)
 - [IntAxis](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntAxis.md)
