@@ -1,5 +1,3 @@
-Here's the translation of the "IntervalGraph" page from Russian to English while preserving the Markdown markup:
-
 # IntervalGraph
 
 IntervalGraph is the main user control element, which is the core of this library. It has its own properties as well as a sub-element [IntAxis](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntAxis.md), which contains axis and text settings.
