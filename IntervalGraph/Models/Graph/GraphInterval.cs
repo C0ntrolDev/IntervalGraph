@@ -1,4 +1,4 @@
-﻿   using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 
@@ -6,7 +6,7 @@ namespace IntervalGraph.Models.Graph
 {
     public class GraphInterval : Interval
     {
-        public List<double> StrokeDashArray { get; set; } = new List<double>() { 1 };
+        public DoubleCollection StrokeDashArray { get; set; } = new DoubleCollection();
         public double StrokeThickness { get; set; } = 1;
         public Brush StrokeBrush { get; set; } = Brushes.Black;
         public Brush FillBrush { get; set; } = Brushes.Black;
