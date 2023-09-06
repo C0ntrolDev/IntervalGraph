@@ -214,7 +214,7 @@
                                     <Canvas>
 
                                         <TextBlock FontSize="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.DrawedFontSize}"
-                                                   FontFamily="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.FontFamily}"
+                                                   FontFamily="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.FontFamily, TargetNullValue=Arial}"
                                                    Foreground="{Binding RelativeSource={RelativeSource AncestorType=local:IntervalGraph, Mode=FindAncestor}, Path=IntAxis.TextColorBrush}">
 
                                             <TextBlock.Text>
