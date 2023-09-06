@@ -1,23 +1,23 @@
-# GraphInteval
+# GraphInterval
 
-GraphInteval - наследник [Interval](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/Interval.md), отличается от него тем, что содержит дополнительные свойства, связанные с отображением в IntervalGraph.
+GraphInterval is a subclass of [Interval](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/Interval.md), but it differs in that it contains additional properties specifically related to its displaying in IntervalGraph.
 
-### Дополнительные свойства, которые используются при отображении в IntevalGraph
+### Additional Properties Used for Display in IntervalGraph
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| StrokeDashArray | DoubleCollection | new DoubleCollection() | StrokeDashArray используемый для отрисовки линиии |
-| StrokeThickness | double | 1 | Ширина линии |
-| StrokeBrush | Brush | Black | Цвет линии |
-| FillBrush | Brush | Black | Цвет интервала внутри |
-| Height | double? | null | Высота интервала на IntervalGraph (от 0 до 1) |
-| Icon | object | null | **Не используется** |
-| LegendName | string | "" | **Не используется** |
+| Property          | Type            | DefaultValue          | Description                                          |
+| ----------------- | --------------- | --------------------- | ---------------------------------------------------- |
+| StrokeDashArray   | DoubleCollection | new DoubleCollection() | StrokeDashArray used for drawing the line.           |
+| StrokeThickness   | double           | 1                     | The width of the line.                               |
+| StrokeBrush       | Brush            | Black                 | The color of the line.                               |
+| FillBrush         | Brush            | Black                 | The color of the interval inside.                    |
+| Height            | double?          | null                  | The height of the interval in IntervalGraph (from 0 to 1). |
+| Icon              | object           | null                  | **Not used**.                                        |
+| LegendName        | string           | ""                    | **Not used**.                                        |
 
+### Example of Two GraphIntervals with Different Settings:
 
-### Пример двух GraphInnteval с разными настройками:
+![Example 1](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Images/GraphIntervalExample1.png)
 
-![](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Images/GraphIntervalExample1.png)
 ```C#
 new GraphInterval()
 {
@@ -39,7 +39,8 @@ new GraphInterval()
 }
 ```
 
-![](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Images/GraphIntervalExample2.png)
+![Example 2](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Images/GraphIntervalExample2.png)
+
 ```C#
 new GraphInterval()
 {
