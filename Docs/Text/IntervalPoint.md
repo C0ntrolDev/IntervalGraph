@@ -1,14 +1,14 @@
 # IntervalPoint
 
-IntervalPoint - класс, представляющий точку интервала
+IntervalPoint is a class representing a interval point.
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| Id | int | 0 | Свойство предназначеное для хранения значений в базе данных при необходимости |
-| X | int | 0.0 | Координата точки |
-| IsInclusive | bool | false | Включена ли точка в интервал |
+| Property    | Type  | DefaultValue | Description                                         |
+| ----------- | ----- | ------------ | --------------------------------------------------- |
+| Id          | int   | 0            | Property intended for storing values in a database if needed. |
+| X           | int   | 0.0          | The coordinate of the point.                        |
+| IsInclusive | bool  | false        | Indicates whether the point is included in the interval. |
 
-### Как использовать IsInclusive
+### How to Use IsInclusive
 
-- Если X ∈ (10; ... => IsInclusive = false
-- Если X ∈ [10; ... => IsInclusive = true
+- If X ∈ (10; ... => `IsInclusive` = false
+- If X ∈ [10; ... => `IsInclusive` = true
