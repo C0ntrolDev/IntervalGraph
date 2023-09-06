@@ -1,6 +1,6 @@
 # IntAxis
 
-IntAxis - специальный класс созданный для разделения настроек [IntervalGraph](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalGraph.md), в нем содержутся все настройки связаные с осью и цифрами под ней
+IntAxis is a specialized class created to manage settings related to the [IntervalGraph](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalGraph.md). It contains all the settings related to the axis and the numbers beneath it.
 
 ```XAML
  <gi:IntervalGraph>
@@ -12,30 +12,30 @@ IntAxis - специальный класс созданный для разде
  <gi:IntervalGraph>
 ```
 
-### Свойства текста под графиком
+### Properties for Text Below the Graph
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| NumStep | int | 1 | С каким отступом будут отрисовываться числа под графиком |
-| TextColorBrush | Brush | Black | Цвет текста под графиком |
-| FontFamily | FontFamily |  | FontFamily текста |
-| TextFormat | string | "{0}" | StringFormat текста под графиком |
-| FontSize | double? | null | FontSize текста под графиком |
-| MinZoom | double | 1.0 | Минимальный Zoom до которого будет уменьшаться текст, при изменении Zoom) |
-| MaxZoom | double | 1.0 | Максимальный Zoom до которого будет уменьшаться текст, при изменении Zoom) |
-| MinFontSize | double | 15.0 | Минимальный размер текста, который будет достигнут при Zoom <= MinZoom |
-| MaxFontSize | double | 15.0 | Максимальный размер текста, которы будет достигнут при Zoom >= MaxZoom |
+| Property        | Type     | DefaultValue | Description                                      |
+| --------------- | -------- | ------------ | ------------------------------------------------ |
+| NumStep         | int      | 1            | Specifies the interval for rendering numbers below the graph. |
+| TextColorBrush  | Brush    | Black        | Color of the text below the graph.               |
+| FontFamily      | FontFamily |             | FontFamily of the text.                         |
+| TextFormat      | string   | "{0}"        | StringFormat for the text below the graph.       |
+| FontSize        | double?  | null         | FontSize for the text below the graph.           |
+| MinZoom         | double   | 1.0          | Minimum Zoom at which text will shrink when Zoom is changed. |
+| MaxZoom         | double   | 1.0          | Maximum Zoom at which text will shrink when Zoom is changed. |
+| MinFontSize     | double   | 15.0         | Minimum text size reached when Zoom <= MinZoom.  |
+| MaxFontSize     | double   | 15.0         | Maximum text size reached when Zoom >= MaxZoom.  |
 
-Можно обратить внимание, что есть два способа указать размер текста:
+Note that there are two ways to specify the text size:
 
-- Указать FontSize, и размер текста будет все время равен ему
-- Указать Min/Max Zoom/FontSize и текст будет варьироваться от MinZoom до MaxZoom FontSize , в зависимости от Zoom, а также Minzoom и MaxZoom
+- Specify `FontSize`, and the text size will always be equal to it.
+- Specify `Min`/`Max` `Zoom`/`FontSize`, and the text size will vary from `MinZoom` to `MaxZoom` `FontSize`, depending on `Zoom`, `MinZoom`, and `MaxZoom`.
 
-### Свойства оси и отображаемых элементов на ней
+### Properties for the Axis and Displayed Elements on It
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| AxisColorBrush | Brush | Black | Цвет оси под графиком |
-| AxisThickness | double | 2.0 | Ширина линии оси под графиком |
-| CirclesRadius | double | 3.0 | Радиус кружков отображаемых в месте пересечения интервала и оси, которые означают включено ли значение в интервал |
-| CirclesThickness | double | 2.0 | Ширина линии тех же кружков |
+| Property        | Type   | DefaultValue | Description                                   |
+| --------------- | ------ | ------------ | --------------------------------------------- |
+| AxisColorBrush  | Brush  | Black        | Color of the axis below the graph.            |
+| AxisThickness   | double | 2.0          | Thickness of the axis line below the graph.   |
+| CirclesRadius   | double | 3.0          | Radius of the circles displayed at the intersection of the interval and axis, indicating whether the value is included in the interval. |
+| CirclesThickness | double | 2.0          | Thickness of the lines of these circles.      |
