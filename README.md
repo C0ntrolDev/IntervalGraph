@@ -80,7 +80,16 @@ List<GraphInterval> intervals = new List<GraphInterval>()
 GraphIntervals = new ObservableCollection<GraphInterval>(intervals);
 ```
 
-Для создания интервалов используется класс [GraphInterval](http://example.com/), у которого есть свойства FirstPoint и LastPoint типа [IntervalPoint](http://example.com/)
+Для создания интервалов используется класс [GraphInterval](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/GraphInterval.md), у которого есть свойства FirstPoint и LastPoint типа [IntervalPoint](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalPoint.md)
 
-- FirstPoint = null  => (−∞ , ...
-- LastPoint = null  => ... ; +∞)
+- FirstPoint == null  => (−∞ , ...
+- LastPoint == null  => ... ; +∞)
+
+
+# Ссылки на документацию
+
+- [IntervalGraph](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalGraph.md)
+- [IntAxis](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntAxis.md)
+- [Interval](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/Interval.md)
+- [GraphInterval](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/GraphInterval.md)
+- [IntervalPoint](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalPoint.md)
