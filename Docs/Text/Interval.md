@@ -1,14 +1,14 @@
 # Interval
 
-Interval - простой класс, предназначеный для создания интервалов.
+Interval is a simple class designed for creating intervals.
 
-### Свойства
+### Properties
 
-| Property | Type | DeffautltValue | Description |
-| -------- | ----|----------------|----------|
-| Id | int | 0 | Свойство предназначеное для хранения значений в базе данных при необходимости |
-| FirstPoint | [IntervalPoint](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalPoint.md) | null | Первая точка интервала |
-| LastPoint | [IntervalPoint](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalPoint.md) | null | Последняя точка интервала |
-| IsPositive | bool | true | **Сейчас не используется** |
+| Property   | Type                                                | DefaultValue | Description                                          |
+| ---------- | --------------------------------------------------- | ------------ | ---------------------------------------------------- |
+| Id         | int                                                 | 0            | Property intended for storing values in a database if needed. |
+| FirstPoint | [IntervalPoint](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalPoint.md) | null         | The first point of the interval.                     |
+| LastPoint  | [IntervalPoint](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalPoint.md) | null         | The last point of the interval.                      |
+| IsPositive | bool                                                | true         | **Currently not used**.                               |
 
-(**Пожалуйста указывайте наименьшое значение FIrstPoint, а наибольшее LastPoint**)
+(**Please specify the smallest value for FirstPoint and the largest value for LastPoint**)
