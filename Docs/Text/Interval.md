@@ -11,4 +11,4 @@ Interval is a simple class designed for creating intervals.
 | LastPoint  | [IntervalPoint](https://github.com/C0ntrolDev/IntervalGraph/blob/master/Docs/Text/IntervalPoint.md) | null         | The last point of the interval.                      |
 | IsPositive | bool                                                | true         | **Currently not used**.                               |
 
-(**Please specify the smallest value for FirstPoint and the largest value for LastPoint**)
+(**Please specify the smallest value for `FirstPoint` and the largest value for `LastPoint`**)
